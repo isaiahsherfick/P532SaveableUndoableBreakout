@@ -1,13 +1,17 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package command.pattern;
 
 import breakout.Ball;
 import javafx.geometry.Point2D;
 
+//Command for moving the ball
 public class BallMoveCommand implements Command {
 
 	private Ball ball;
@@ -31,8 +35,10 @@ public class BallMoveCommand implements Command {
 		this.timeDelta = timeDelta;
 	}
 	
+    //Move the ball forward in time and space
 	@Override
 	public void execute() {
+        //store the ball's current parameters for undo purposes
 		undoPosition = ball.getPosition();
 		undoPreviousPosition = ball.getPreviousPosition();
 		undoVelocity = ball.getVelocity();
@@ -40,8 +46,10 @@ public class BallMoveCommand implements Command {
 		undoDimensions = ball.getDimensions();
 		undoFireBall = ball.isFireBall();
 		
+        //Move the ball
 		ball.performMove(timeDelta);
 		
+        //Store the current positions for redo purposes
 		redoPosition = ball.getPosition();
 		redoPreviousPosition = ball.getPreviousPosition();
 		redoVelocity = ball.getVelocity();
@@ -50,8 +58,10 @@ public class BallMoveCommand implements Command {
 		redoFireBall = ball.isFireBall();
 	}
 
+    //Undo the move
 	@Override
 	public void undo() {
+        //Set the ball's parameters to the stored previous ones
 		ball.setPosition(undoPosition);
 		ball.setPreviousPosition(undoPreviousPosition);
 		ball.setVelocity(undoVelocity);
@@ -61,7 +71,9 @@ public class BallMoveCommand implements Command {
 	}
 	
 	@Override 
+    //Redo the move
 	public void redo() {
+        //Set the ball's parameters to the stored "next" ones
 		ball.setPosition(redoPosition);
 		ball.setPreviousPosition(redoPreviousPosition);
 		ball.setVelocity(redoVelocity);

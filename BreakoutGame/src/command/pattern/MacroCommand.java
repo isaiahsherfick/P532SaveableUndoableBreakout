@@ -1,13 +1,17 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package command.pattern;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
+//Data structure to store a bunch of commands
 public class MacroCommand {
 	
 	private Queue<Command> commands;
@@ -20,22 +24,26 @@ public class MacroCommand {
 		this.commands = commands;
 	}
 	
+    //Add a command to the queue
 	public void addCommand(Command command) {
 		commands.add(command);
 	}
 	
+    //Execute each command in the queue
 	public void execute() {
 		for(Command command: commands) {
 			command.execute();
 		}
 	}
 	
+    //undo each command in the queue
 	public void undo() {
 		for(Command command: commands) {
 			command.undo();
 		}
 	}
 	
+    //redo each command in the queue
 	public void redo() {
 		for(Command command: commands) {
 			command.redo();

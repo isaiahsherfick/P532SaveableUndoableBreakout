@@ -1,12 +1,16 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors: Aditi Shivaji Pednekar
+ * @editors: Aditi Shivaji Pednekar, Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package command.pattern;
 
 import java.util.Stack;
 
+//Invoker for our commands
 public class CommandInvoker implements CommandListener {
 	
 	// Each MacroCommand contains all commands for a given tick/update in the game engine
@@ -58,6 +62,7 @@ public class CommandInvoker implements CommandListener {
 
 	}
 	
+    //Redo
 	public void redoCurrentTickCommands() {
 		MacroCommand redoMacroCommand = popFromRedoCommandList();
 		pushToUndoCommandList(redoMacroCommand);

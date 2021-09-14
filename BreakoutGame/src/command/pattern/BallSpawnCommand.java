@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 5, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package command.pattern;
 
@@ -10,6 +13,7 @@ import breakout.GameManager;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
+//Command for spawning a ball
 public class BallSpawnCommand implements Command {
 
 	private GameManager gameManager;
@@ -29,6 +33,7 @@ public class BallSpawnCommand implements Command {
 		this.gameManager = gameManager;
 	}
 	
+    //Spawn the ball
 	@Override
 	public void execute() {
 		spawnedBall = gameManager.spawnNewBall();
@@ -46,6 +51,7 @@ public class BallSpawnCommand implements Command {
 		undoColor = Color.TRANSPARENT;
 	}
 
+    //despawn the ball
 	@Override
 	public void undo() {
 		spawnedBall.setPosition(undoPosition);

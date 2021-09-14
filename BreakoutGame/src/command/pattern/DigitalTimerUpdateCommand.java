@@ -1,13 +1,17 @@
 /**
  * @author: Snehal Patare, Aditi Pednekar
  * @CreationDate: Sep 4, 2021
- * @editors: Ethan Taylor Behar, 
+ * @editors: Ethan Taylor Behar, Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 
 package command.pattern;
 
 import breakout.DigitalTimer;
 
+//Command for telling the digital timer to update
 public class DigitalTimerUpdateCommand implements Command {
 	
 	private double timeDelta;
@@ -21,6 +25,7 @@ public class DigitalTimerUpdateCommand implements Command {
 	}
 
 	@Override
+    //Step the clock forward
 	public void execute() {
 		undoLabel = digitalTimer.getLabel();
 		
@@ -30,11 +35,13 @@ public class DigitalTimerUpdateCommand implements Command {
 	}
 
 	@Override
+    //Walk it back
 	public void undo() {
 		digitalTimer.setLabel(undoLabel);
 	}
 
 	@Override
+    //Walk it back forward
 	public void redo() {
 		digitalTimer.setLabel(redoLabel);
 	}

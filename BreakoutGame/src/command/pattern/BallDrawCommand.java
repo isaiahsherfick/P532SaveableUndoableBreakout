@@ -1,13 +1,17 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package command.pattern;
 
 import breakout.Ball;
 import javafx.scene.canvas.GraphicsContext;
 
+//Command to draw the ball
 public class BallDrawCommand implements Command {
 
 	private Ball ball;
@@ -18,6 +22,7 @@ public class BallDrawCommand implements Command {
 		this.context = context;
 	}
 	
+    //Draw the ball
 	@Override
 	public void execute() {
 		ball.performDraw(context);

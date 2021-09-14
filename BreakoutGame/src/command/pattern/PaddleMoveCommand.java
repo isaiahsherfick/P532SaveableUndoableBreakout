@@ -1,13 +1,17 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package command.pattern;
 
 import breakout.Paddle;
 import javafx.geometry.Point2D;
 
+//Command for moving the paddle
 public class PaddleMoveCommand implements Command {
 	
 	private Paddle paddle;
@@ -27,14 +31,18 @@ public class PaddleMoveCommand implements Command {
 	}
 	
 	@Override
+    //Move the paddle
 	public void execute() {
+        //Store its previous state
 		undoPosition = paddle.getPosition();
 		undoPreviousPosition = paddle.getPreviousPosition();
 		undoVelocity = paddle.getVelocity();
 		undoMoveDirection = paddle.getMoveDirection();
 		
+        //Perform the move
 		paddle.performMove(timeDelta);
 		
+        //Store the new state
 		redoPosition = paddle.getPosition();
 		redoPreviousPosition = paddle.getPreviousPosition();
 		redoVelocity = paddle.getVelocity();
@@ -42,7 +50,9 @@ public class PaddleMoveCommand implements Command {
 	}
 
 	@Override
+    //Undo the move
 	public void undo() {
+        //Restore the state
 		paddle.setPosition(undoPosition);
 		paddle.setPreviousPosition(undoPreviousPosition);
 		paddle.setVelocity(undoVelocity);
@@ -50,7 +60,9 @@ public class PaddleMoveCommand implements Command {
 	}
 	
 	@Override
+    //Redo the move
 	public void redo() {
+        //Restore the redo state
 		paddle.setPosition(redoPosition);
 		paddle.setPreviousPosition(redoPreviousPosition);
 		paddle.setVelocity(redoVelocity);

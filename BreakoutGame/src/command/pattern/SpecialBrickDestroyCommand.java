@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package command.pattern;
 
@@ -9,6 +12,7 @@ import breakout.SpecialBrick;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
+//Command for destroying the fireball brick
 public class SpecialBrickDestroyCommand implements Command {
 
 	private SpecialBrick specialBrick;
@@ -24,19 +28,24 @@ public class SpecialBrickDestroyCommand implements Command {
 	}
 	
 	@Override
+    //Destroy the brick
 	public void execute() {
+        //Store prior state
 		undoPosition = specialBrick.getPosition();
 		undoDimensions = specialBrick.getDimensions();
 		undoColor = specialBrick.getColor();
 		
+        //Update state
 		specialBrick.destroyBrick();
 		
+        //Store new state
 		redoPosition = specialBrick.getPosition();
 		redoDimensions = specialBrick.getDimensions();
 		redoColor = specialBrick.getColor();
 	}
 
 	@Override
+    //Restore previous state
 	public void undo() {
 		specialBrick.setPosition(undoPosition);
 		specialBrick.setDimensions(undoDimensions);
@@ -44,6 +53,7 @@ public class SpecialBrickDestroyCommand implements Command {
 	}
 
 	@Override
+    //Restore the redo state
 	public void redo() {
 		specialBrick.setPosition(redoPosition);
 		specialBrick.setDimensions(redoDimensions);
