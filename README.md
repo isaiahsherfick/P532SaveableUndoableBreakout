@@ -1,7 +1,7 @@
-# P532 Assignment 2 Overview
-## By: Ethan Behar, Aditi Pednekar, Snehal Patare, Abhishek Tiwari
+# P532 Assignment 3 Overview
+## By: Abhishek, Isaiah and Snehal
 
-Assignment 2 consists of building the same Breakout game as in Assignment 1. Additionally, we have to implement new features: Pause/Start/Restart/Undo/Replay buttons. The undo and replay functionality can be accomplished by capturing the object's actions within a command. Thus, we need to implement this functionality using the Command Pattern.
+Assignment 3 consists of building the same Breakout game as in Assignment 2. Additionally, we have to implement new features: Change Layout/Pause/Undo/Replay/Save/Load buttons.
 
 # Instructions To Run
 Built using the Eclipse IDE version 2021-16. Written in Java8 and JavaFX.
