@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  * @References:
  * https://stackoverflow.com/questions/4904308/axis-aligned-bounding-boxes-collision-what-sides-are-colliding
  **/
@@ -16,12 +19,15 @@ import game.engine.AnimationTimerGameLoop;
 import game.engine.GameObject;
 import javafx.geometry.Point2D;
 
+//Handler for all collisions
 public class CollisionHandler2D {
 	    
     private ArrayList<GameObject> gameObjects;
     private Hashtable<GameObject, GameObject> collidedObjects = new Hashtable<GameObject, GameObject>();
     private double gameSceneWidth;
     private double gameSceneHeight;
+
+    //TODO this could be an enum
 	private final static int ZERO_BOUND = 0;
 	private final static int ONE = 1;
 	private final static int FLIP_DIRECTION = -1;
@@ -40,6 +46,7 @@ public class CollisionHandler2D {
 		gameSceneHeight = height;
 	}
     
+    //Called when the game is restarted
     public void restart() {
         // Dump gameObjects to start fresh
     	gameObjects.clear();
@@ -51,6 +58,8 @@ public class CollisionHandler2D {
     	collidedObjects = new Hashtable<GameObject, GameObject>();
     }
 	
+    //Add a gameobject to the collisionhandler2d so it will 
+    //handle the object's collision
     public void addGameObject(GameObject object) {
 		// Prevent double registration
 		if(!gameObjects.contains(object)) {
@@ -58,6 +67,7 @@ public class CollisionHandler2D {
 		}
     }
     
+    //Remove an object from the collisionhandler2d
     public void removeGameObject(GameObject object) {
 		// Ensure DrawBehavior is already registered
 		int objectIndex = gameObjects.indexOf(object);
@@ -67,8 +77,12 @@ public class CollisionHandler2D {
 		}
     }
     
+    //Process all collisions on a given frame
     public void processCollisions(AnimationTimerGameLoop gameLoop) {
+
+        //For each object tracked by the collisionhandler2d
 		for (GameObject object1 : gameObjects) {
+            //For each object tracked by the collisionhandler2d
 			for (GameObject object2 : gameObjects) {
 				// Skip processing the same two objects
 				if(object1 == object2) {
@@ -79,14 +93,18 @@ public class CollisionHandler2D {
 				if(object1 instanceof Brick && object2 instanceof Brick) {
 					continue;
 				}
+                //check the two objects for collision
 				checkObjectCollision(object1, object2);
 			}
+            //Finally check to ensure object1 isn't hitting the wall
 			checkScreenBoundsCollision(object1, gameLoop);
 		}
 		// Reset collided tracker per tick
 		collidedObjects.clear();
     }
 
+    //Atomically check for collision between two objects
+    //called in processCollisions
 	private void checkObjectCollision(GameObject object1, GameObject object2) {
 		// Obtain object positions
 		Point2D object1Position = object1.getPosition();
@@ -106,6 +124,8 @@ public class CollisionHandler2D {
 		}
 	}
     
+    //return true if neither object is a special brick
+    //TODO this seems sloppy
     private boolean checkIfNotFireBall(GameObject object1, GameObject object2) {
 		if (object1 instanceof SpecialBrick) {
 			object1.handleObjectCollision(object2, object1.getPosition(), object1.getPosition());
@@ -120,6 +140,7 @@ public class CollisionHandler2D {
 		return true;
 	}
 
+    //Checks to see if the objects are overlapping one another
 	private boolean checkIfOverlap(GameObject object1, GameObject object2, Point2D object1Position, Point2D object2Position) {
 		return object1.getUpperRight(object1Position).getX() >= object2.getUpperLeft(object2Position).getX() &&
 				object1.getUpperLeft(object1Position).getX() <= object2.getUpperRight(object2Position).getX() &&
@@ -127,6 +148,8 @@ public class CollisionHandler2D {
 				object1.getUpperLeft(object1Position).getY() <= object2.getLowerLeft(object2Position).getY();
 	}
 
+    //Handle a collision between two objects
+    //must know if they are not a special brick
 	public void handleObjectCollision(GameObject object1, GameObject object2, boolean isNotFireBall) {
     	// Break if we already dealt with this collision
     	// Due to the nature of the double loop it is possible to detect a collision twice in one tick()
@@ -149,6 +172,7 @@ public class CollisionHandler2D {
     	}
     }
     
+    //Returns a string denoting which direction one of the objects will go
     private String determineCollisionDirection(GameObject object1, GameObject object2) {
     	double leftPenetration = 9999;
     	double rightPenetration = 9999;
@@ -219,6 +243,8 @@ public class CollisionHandler2D {
     	
     }
     
+    //I'm pretty sure this method exists to make the collision really clean
+    //as in they "kiss" and just barely touch
     private void kissObjects(GameObject object1, GameObject object2, String collisionDirection, boolean isNotFireBall) {
 		double object1XMoveDirection = object1.getMoveDirection().getX();
 		double object1YMoveDirection = object1.getMoveDirection().getY();
@@ -270,6 +296,7 @@ public class CollisionHandler2D {
 				new Point2D(object2XMoveDirection, object2YMoveDirection));
 	}
 
+    //Check if an object has collided with the bounds of the screen
     private void checkScreenBoundsCollision(GameObject object, AnimationTimerGameLoop gameLoop) {
     	Point2D position = object.getPosition();
     	Point2D dimensions = object.getDimensions();
@@ -304,6 +331,9 @@ public class CollisionHandler2D {
 		wallBounceCheck(object, gameSceneWidth, gameSceneHeight, gameLoop);
     }
     
+    //Bounce an object off the wall
+    //TODO rename this method, "Check" makes it sound like it returns a bool
+    //but this handles the bounce itself
 	public void wallBounceCheck(GameObject object, double gameSceneWidth, double gameSceneHeight, AnimationTimerGameLoop gameLoop) {
 		double horizontalDirection = object.getMoveDirection().getX();
 		double verticalDirection = object.getMoveDirection().getY();
