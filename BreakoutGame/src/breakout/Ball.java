@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package breakout;
 
@@ -14,6 +17,7 @@ import javafx.scene.paint.Color;
 
 public class Ball extends GameObject {
 	
+    //Move strategy object
 	protected Movable moveBehaviour;
 //	private final static int SPEED_INCREMENT = 15;
 	private double speed = 200f;
@@ -35,9 +39,11 @@ public class Ball extends GameObject {
 	}
 
 	@Override
+    //Called every frame
 	public void update(double timeDelta) {
 		commandListener.receiveCommand(new BallMoveCommand(this, timeDelta));
 		
+        //Handle fireball behavior
 		if (isFireBall) {
 			this.setDimensions(30, 30);
 			fireBallBeginDelta += timeDelta;
@@ -49,17 +55,23 @@ public class Ball extends GameObject {
 		} 
 	}
 	
+    //Move the ball
 	public void performMove(double timeDelta) {
+        //Call the move strategy object to learn velocity
 		velocity = moveBehaviour.move(timeDelta, moveDirection, speed);
+        //update position
 		position = position.add(velocity);
 	}
 
 	@Override
+    //Called on collision with object
 	public void handleObjectCollision(GameObject collider, Point2D newPosition, Point2D newMoveDirection) {
+        //Update position and moveDirection
 		previousPosition = position;
 		position = newPosition;
 		moveDirection = newMoveDirection;
 		
+        //Check to see if we're a fireball now
 		if (collider instanceof SpecialBrick) {
 			setFireBall(true);
 			this.fireBallBeginDelta = 0;
@@ -67,7 +79,9 @@ public class Ball extends GameObject {
 	}
 	
 	@Override
+    //Called on collision with screen
 	public void handleScreenCollision(Point2D newPosition) {
+        //Update position
 		previousPosition = position;
 		position = newPosition;
 //		increaseSpeed()

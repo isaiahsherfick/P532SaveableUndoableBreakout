@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 12, 2021
- * @editors: Aditi Pednekar, Snehal Patare
+ * @editors: Aditi Pednekar, Snehal Patare, Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package breakout;
 
@@ -78,14 +81,19 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 	}
 	
 	public void restart() {
+        //Clear objects from the allObjects ArrayList
 		allObjects.clear();
 		allObjects = null;
+        //re-initialize allObjects
 		allObjects = new ArrayList<Object>();
 
+
+        //Do the same to the removableObjects ArrayList
 		removableObjects.clear();
 		removableObjects = null;
 		removableObjects = new ArrayList<Object>();
 		
+        //And the clickable ArrayList
 		clickables.clear();
 		clickables = null;
 		clickables = new ArrayList<Clickable>();
@@ -109,16 +117,21 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 		//BuildSeriousLevel();
 		//BuildBallCollisionTests();
 		
+        //Make the paddle
 		Paddle paddle = new Paddle(new DrawSquare(), Color.BLACK, 350, 550, 100, 10, new SimpleMovement());
 		paddle.setSpawnBallListener(this);
+        //Add it to the AllObjects ArrayList
 		addObject(paddle);
 
+        //Make the clock, add it to allobjects
 		DigitalTimer clock = new DigitalTimer(new DrawText(), Color.BLACK, 1, 30, "Verdana", 30, "Timer: ");
 		addObject(clock);
 		
+        //Make the pause button
 		TextButton pauseButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(200, 7), new Point2D(60, 30), 
 				new Text(new DrawText(), Color.WHITE, 210, 25, "Verdana", 12, "Pause")) 
 				{ 
+                    //Supply it with onClick behavior
 					@Override 
 					public void onClick() {
 						gameEngine.pause();
@@ -126,9 +139,11 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 				};
 		addObject(pauseButton);
 		
+        //Make the resumeButton
 		TextButton resumeButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(275, 7), new Point2D(60, 30), 
 				new Text(new DrawText(), Color.WHITE, 282, 25, "Verdana", 12, "Resume")) 
 				{ 
+                    //Supply it with onClick behavior
 					@Override 
 					public void onClick() {
 						gameEngine.resume();
@@ -136,6 +151,7 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 				};
 		addObject(resumeButton);
 		
+        //Make the restartButton
 		TextButton restartButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(350, 7), new Point2D(60, 30), 
 				new Text(new DrawText(), Color.WHITE, 357, 25, "Verdana", 12, "Restart")) 
 				{ 
@@ -146,6 +162,7 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 				};
 		addObject(restartButton);
 		
+        //Make the undoButon
 		TextButton undoButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(425, 7), new Point2D(60, 30), 
 				new Text(new DrawText(), Color.WHITE, 432, 25, "Verdana", 12, "Undo")) 
 				{ 
@@ -156,6 +173,7 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 				};
 		addObject(undoButton);
 		
+        //Make the rewindButton
 		TextButton rewindButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(500, 7), new Point2D(60, 30), 
 				new Text(new DrawText(), Color.WHITE, 507, 25, "Verdana", 12, "Rewind")) 
 				{ 
@@ -166,6 +184,7 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 				};
 		addObject(rewindButton);
 		
+        //Make the redobutton
 		TextButton redoButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(575, 7), new Point2D(60, 30), 
 				new Text(new DrawText(), Color.WHITE, 582, 25, "Verdana", 12, "Redo")) 
 				{ 
@@ -176,6 +195,7 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 				};
 		addObject(redoButton);
 		
+        //Make the fast forward button
 		TextButton fastForwardButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(650, 7), new Point2D(60, 45), 
 				new Text(new DrawText(), Color.WHITE, 657, 25, "Verdana", 12, "Fast\nForward")) 
 				{ 
@@ -186,6 +206,7 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 				};
 		addObject(fastForwardButton);
 		
+        //Make the replaybutton
 		TextButton replayButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(725, 7), new Point2D(60, 30), 
 				new Text(new DrawText(), Color.WHITE, 732, 25, "Verdana", 12, "Replay")) 
 				{ 
@@ -197,6 +218,7 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 		addObject(replayButton);
 	}
 
+    //Add an object to the allObjects arraylist
 	public void addObject(Object object) {
 		allObjects.add((Object)object);
 		if (object instanceof Clickable) {
@@ -213,17 +235,20 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 		return clickables;
 	}
 	
+    //Spawn a new ball, add it to allobjects
 	public Ball spawnNewBall() {
 		Ball ball = new Ball(new DrawCircle(), Color.WHITE, 400, 395, 15, 15, new SimpleMovement());
 		addObject(ball);
 		return ball;
 	}
 	
+    //Spawn the first ball as a command
 	@Override 
 	public void spawnBall() { 
 		commandListener.receiveCommand(new BallSpawnCommand(this));
 	}
 	
+    //Used for testing ball collisions
 	@SuppressWarnings("unused")
 	private void BuildBallCollisionTests() {
 		Ball ball = new Ball(new DrawCircle(), Color.BLACK, 600, 600, 10, 10, new SimpleMovement());

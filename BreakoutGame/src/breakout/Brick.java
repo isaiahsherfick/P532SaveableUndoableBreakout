@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  * @References:
  * https://guides.codepath.com/android/Creating-Custom-Listeners
  **/
@@ -29,6 +32,8 @@ public class Brick extends GameObject {
 	}
 
 	@Override
+    //Do nothing since the bricks don't move
+    //Potential for strategy object here in case we want moving bricks or something
 	public void update(double timeDelta) {
 	}
 	
@@ -49,8 +54,12 @@ public class Brick extends GameObject {
 	}
 	
 	@Override
+    //Called on object collision
 	public void handleObjectCollision(GameObject collider, Point2D newPosition, Point2D newMoveDirection) {
+        //color the ball to match my color
 		collider.setColor(this.getColor());
+
+        //Send the command listener a note that I've been destroyed
 		commandListener.receiveCommand(new BrickDestroyCommand(this));
 	}
 	

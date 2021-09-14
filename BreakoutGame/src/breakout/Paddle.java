@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 14 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package breakout;
 
@@ -32,11 +35,13 @@ public class Paddle extends GameObject implements Clickable {
 		this.moveBehaviour = moveBehaviour;
 	}
 
+    //on tick
 	@Override
 	public void update(double timeDelta) {
 		commandListener.receiveCommand(new PaddleMoveCommand(this, timeDelta));
 	}
 	
+    //move the paddle
 	public void performMove(double timeDelta) {
 		captureMoveDirection();
 		velocity = moveBehaviour.move(timeDelta, moveDirection, speed);
@@ -60,11 +65,13 @@ public class Paddle extends GameObject implements Clickable {
 	}
 
 	@Override
+    //When the paddle hits the wall
 	public void handleScreenCollision(Point2D newPosition) {
 		previousPosition = position;
 		position = newPosition;
 	}
 
+    //When the paddle collides with another object
 	@Override
 	public void handleObjectCollision(GameObject collider, Point2D newPosition, Point2D newMoveDirection) {
 		// nothing
@@ -81,6 +88,7 @@ public class Paddle extends GameObject implements Clickable {
 	}
 
 	@Override
+    //Spawn a ball on clicking the paddle
 	public void onClick() {
 		spawnBallListener.spawnBall();
 	}
