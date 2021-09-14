@@ -1,0 +1,7 @@
+Collision Logic Help
+https://www.youtube.com/watch?v=MrTW2K1i1Mk
+https://gamedev.stackexchange.com/questions/13774/how-do-i-detect-the-direction-of-2d-rectangular-object-collisions
+
+Timeline Game Loop Help
+https://gamedevelopment.tutsplus.com/tutorials/introduction-to-javafx-for-game-development--cms-23835
+	-went to the git and used Example3T.java as inspiration/guidance
