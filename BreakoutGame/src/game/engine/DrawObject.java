@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors: Snehal Patare, Aditi Pednekar
+ * @editors: Snehal Patare, Aditi Pednekar, Isaiah Sherfick
+ * Last modified on: 15 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package game.engine;
 
@@ -25,6 +28,7 @@ public abstract class DrawObject implements Observer {
         color = Color.MAGENTA;
 	}
 	
+    //Drawbehavior is a strategy object for drawing
 	public DrawObject(Drawable drawBehavior, Color color, Point2D position, Point2D dimensions) {
 		this.drawBehaviour = drawBehavior;
 		this.position = position;
@@ -32,6 +36,8 @@ public abstract class DrawObject implements Observer {
 		this.color = color;
 	}
 		
+    //Use the drawBehavior strategy object to draw
+    //onto the graphics context
 	public void performDraw(GraphicsContext context) {
 		drawBehaviour.draw(this, context);
 	}

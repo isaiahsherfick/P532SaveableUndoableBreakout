@@ -1,7 +1,10 @@
 /**
  * @author: Ed Eden-Rump
  * @CreationDate: Sep 1, 2021
- * @editors: Ethan Taylor Behar
+ * @editors: Ethan Taylor Behar, Isaiah Sherfick
+ * Last modified on: 15 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  * @Info: Be warned Ed's code was bugged and needed to be fixed.
  * @References: 
  * https://github.com/edencoding/javafx-game-dev/blob/master/SpaceShooter/src/main/java/com/edencoding/animation/GameLoopTimer.java
@@ -39,12 +42,14 @@ public abstract class AnimationTimerGameLoop extends AnimationTimer {
 	
 	public void pause() {
 		if (!isPaused) { 
+            //Mark that a pause is scheduled
 			isPauseScheduled = true;
 		}
 	}
 	
 	public void play() {
 		if (isPaused) { 
+            //Mark that a play is scheduled
 			isPlayScheduled = true;
 		}
 	}

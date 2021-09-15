@@ -1,7 +1,10 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
+ * @editors: Isaiah Sherfick
+ * Last modified on: 15 Sep 2021
+ * Last modified by: Isaiah Sherfick
+ * Changes: Added comments
  **/
 package game.engine;
 
@@ -11,6 +14,8 @@ import command.pattern.CommandListener;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
+//Abstract class GameObject
+//Handles only position, velocity, and movement information
 public abstract class GameObject extends DrawObject implements ScreenCollidable, ObjectCollidable {
 	
 	protected Point2D previousPosition;

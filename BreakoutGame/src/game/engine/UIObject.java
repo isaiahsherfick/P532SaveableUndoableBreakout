@@ -1,7 +1,6 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
- * @editors:
  **/
 package game.engine;
 

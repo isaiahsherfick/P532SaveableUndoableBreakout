@@ -1,7 +1,10 @@
 /**
  * @author: Ed Eden-Rump
  * @CreationDate: Sep 1, 2021
- * @editors: Ethan Taylor Behar, Aditi Shivaji Pednekar
+ * @editors: Ethan Taylor Behar, Aditi Shivaji Pednekar, Isaiah Sherfick
+ //* Last modified on: 15 Sep 2021
+ //* Last modified by: Isaiah Sherfick
+ //* Changes: Added comments
  * @Info: Be warned Ed's code was bugged and needed to be fixed.
  * @References: 
  * https://github.com/edencoding/javafx-game-dev/blob/master/SpaceShooter/src/main/java/com/edencoding/animation/GameLoopTimer.java
@@ -101,6 +104,7 @@ public class PausableGameEngine implements Observable {
     }
     
 	public void start() {
+        //Display the initial dialogue for the user
 		InitDialog.showInitialDialog(gameStage, gameLoop, gameManager, this.gameScene);
 	}
 	
@@ -124,14 +128,17 @@ public class PausableGameEngine implements Observable {
 		start();
 	}
 	
+    //pause the game
 	public void pause() {
 		gameLoop.pause();
 	}
 		
+    //resume the game
 	public void resume() {
 		gameLoop.play();
 	}
 
+    //undo the previous command
 	public void undo() {
 		if (gameLoop.isPlaying()) {
 			pause();
@@ -143,40 +150,54 @@ public class PausableGameEngine implements Observable {
 		renderer.render();
 	}
 
+    //rewind
 	public void rewind() {
+        //resume the game
 		resume();
+        //set rewind to true
 		rewind = true;
+        //set fast forward to false
 		fastForward = false;
 	}
 	
+    //opposite of undo
 	public void redo() {
+        //Pause the game if not paused
 		if (gameLoop.isPlaying()) {
 			pause();
 		}
+        //make sure there are things to be redone in the queue
 		if(commandInvoker.redosAvailable()) {
 			commandInvoker.redoCurrentTickCommands();			
 		}
+        //Render what's happening
 		renderer.render();
 	}
 	
+    //redo over and over
 	public void fastForward() {
+        //resume the game
 		resume();
+        //modify relevant booleans
 		fastForward = true;
 		rewind = false;
 	}
 	
-	// TODO
+    //replay from the beginning
 	public void replay() {
+        //Undo all the way to the beginning of the game
 		commandInvoker.undosToRedos();
 		fastForward();
 	}
 	
+    //Add all objects in an arraylist to the engine
 	public void addObjectsToEngine(ArrayList<Object> objects) {
 		for (Object object : objects) { 
 			addObjectToEngine(object);
 		}
 	}
     
+    //Add a single object to the engine
 	public void addObjectToEngine(Object object) {
 		if (object instanceof Observer) {
 			registerObserver((Observer) object);
@@ -190,6 +211,7 @@ public class PausableGameEngine implements Observable {
 		}
 	}
 	
+    //Remove all objects present in gameManager.getRemovableObjects()
 	private void removeObjectsFromEngine() {
 		List<Object> removables = gameManager.getRemovableObjects();
 		for (Object object : removables) {
