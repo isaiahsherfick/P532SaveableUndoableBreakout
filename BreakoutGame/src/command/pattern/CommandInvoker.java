@@ -46,7 +46,7 @@ public class CommandInvoker implements CommandListener {
 		currentTickCommandList.execute();
 		pushToUndoCommandList(currentTickCommandList);
 		currentTickCommandList = new MacroCommand();
-		System.out.println("ECTC Undo Count: " + undoCommandList.size());
+		//System.out.println("ECTC Undo Count: " + undoCommandList.size());
 	}
 	
 	/*
@@ -57,8 +57,8 @@ public class CommandInvoker implements CommandListener {
 		MacroCommand undoMacroCommand = popFromUndoCommandList();
 		pushToRedoCommandList(undoMacroCommand);
 		undoMacroCommand.undo();
-		System.out.println("UCTC Undo Count: " + undoCommandList.size());
-		System.out.println("UCTC Redo Count: " + redoCommandList.size());
+		//System.out.println("UCTC Undo Count: " + undoCommandList.size());
+		//System.out.println("UCTC Redo Count: " + redoCommandList.size());
 
 	}
 	
@@ -67,8 +67,8 @@ public class CommandInvoker implements CommandListener {
 		MacroCommand redoMacroCommand = popFromRedoCommandList();
 		pushToUndoCommandList(redoMacroCommand);
 		redoMacroCommand.redo();
-		System.out.println("RCTC Undo Count: " + undoCommandList.size());
-		System.out.println("RCTC Redo Count: " + redoCommandList.size());
+		//System.out.println("RCTC Undo Count: " + undoCommandList.size());
+		//System.out.println("RCTC Redo Count: " + redoCommandList.size());
 	}
 	
 	public void undosToRedos(){

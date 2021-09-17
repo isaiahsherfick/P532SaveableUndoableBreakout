@@ -163,7 +163,7 @@ public class CollisionHandler2D {
         	// Determine collision direction
         	String collisionDirection = determineCollisionDirection(object1, object2);
         	if (collisionDirection == "") {
-        		System.out.println("ERRROOOOORRRRRRRRRRRRRRRRRRRRRRRRR");
+        		//System.out.println("ERRROOOOORRRRRRRRRRRRRRRRRRRRRRRRR");
         	}
         	// Tell objects they collided
 			// TODO does collision direction have to flip to fix the TODO in checkObjectCollision(...)?
@@ -180,33 +180,33 @@ public class CollisionHandler2D {
     	double bottomPenetration = 9999;
     	String direction = "";
     	
-    	System.out.println("Ball is object1 " + (object1 instanceof Ball) + "Color is " + object1.getColor().toString());
+    	//System.out.println("Ball is object1 " + (object1 instanceof Ball) + "Color is " + object1.getColor().toString());
     	
     	if(object1.getPosition().getX() < object2.getPosition().getX() 
     			&& object2.getPosition().getX() < object1.getUpperRight(object1.getPosition()).getX()) {   
     	    leftPenetration = object1.getUpperRight(object1.getPosition()).getX() - object2.getPosition().getX();
-    	    System.out.println("LeftPen: " + leftPenetration);
+    	    //System.out.println("LeftPen: " + leftPenetration);
 //    		direction = LEFT;
     	}
 
     	if(object2.getPosition().getX() < object1.getPosition().getX() 
     			&& object1.getPosition().getX() < object2.getUpperRight(object2.getPosition()).getX()) {
     	    rightPenetration = object1.getPosition().getX() - object2.getUpperRight(object2.getPosition()).getX();
-    	    System.out.println("RightPen: " + rightPenetration);
+    	    //System.out.println("RightPen: " + rightPenetration);
 //    		direction = RIGHT;
     	}
 
     	if(object1.getPosition().getY() < object2.getPosition().getY() 
     			&& object2.getPosition().getY() < object1.getLowerLeft(object1.getPosition()).getY()) {
     		topPenetration = object2.getPosition().getY() - object1.getLowerLeft(object1.getPosition()).getY();
-    	    System.out.println("TopPen: " + topPenetration);
+    	    //System.out.println("TopPen: " + topPenetration);
 //    		direction = TOP;
     	}
 
     	if(object2.getPosition().getY() < object1.getPosition().getY() 
     			&& object1.getPosition().getY() < object2.getLowerLeft(object2.getPosition()).getY()) {
     		bottomPenetration = object1.getPosition().getY() - object2.getLowerLeft(object2.getPosition()).getY();
-    	    System.out.println("BottomPen: " + bottomPenetration);
+    	    //System.out.println("BottomPen: " + bottomPenetration);
 //    		direction = BOTTOM;
     	}
     	
@@ -237,7 +237,7 @@ public class CollisionHandler2D {
     			direction = "BOTTOMRIGHT";
     		}
     	}
-      	System.out.println(direction);
+      	//System.out.println(direction);
     	return direction;
 
     	

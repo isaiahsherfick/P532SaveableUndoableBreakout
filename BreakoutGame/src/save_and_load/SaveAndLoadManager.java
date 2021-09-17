@@ -1,0 +1,55 @@
+/**
+ * @author: Isaiah Sherfick
+ * @CreationDate: Sep 16, 2021
+ * @editors:
+ **/
+
+package save_and_load;
+
+import java.util.ArrayList;
+
+import game.engine.GameObject;
+
+//Class to manage saves and loads
+//This class is responsible for knowing where savefiles are stored
+//as well as parsing and processing them. This includes instantiating each of the saved objects
+public class SaveAndLoadManager
+{
+    private String pathToSaveDirectory;
+
+    //Save information will be stored as an arraylist of strings which each individual game object will be responsible for providing, one string per object
+    private ArrayList<String> saveData; 
+
+    private ArrayList<GameObject> gameObjects;
+
+    //Default constructor
+    public SaveAndLoadManager()
+    {
+        this.gameObjects = new ArrayList<>();   
+        this.saveData = new ArrayList<>();
+
+        //TODO test this default directory on Windows
+        this.pathToSaveDirectory = "./";
+    }
+
+    //add each gameobject in an arraylist to the SaveAndLoadManager
+    public void addGameObjects(ArrayList<GameObject> objectsToAdd)
+    {
+        for (int i = 0; i < objectsToAdd.size(); i++)
+        {
+            gameObjects.add(objectsToAdd.get(i));
+        }
+    }
+
+    //add a single gameobject to the SaveAndLoadManager
+    public void addGameObject(GameObject objectToAdd)
+    {
+        gameObjects.add(objectToAdd);
+    }
+
+    public ArrayList<GameObject> getGameObjects()
+    {
+        return gameObjects;
+    }
+}
+

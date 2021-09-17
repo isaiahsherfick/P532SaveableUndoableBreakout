@@ -268,7 +268,7 @@ public class PausableGameEngine implements Observable {
 					commandInvoker.undoCurrentTickCommands();
 					renderer.render();
 				} else {
-					System.out.println("Out of undos - pausing");
+					//System.out.println("Out of undos - pausing");
 					rewind = false;
 					pause();
 				}
@@ -278,7 +278,7 @@ public class PausableGameEngine implements Observable {
 					commandInvoker.redoCurrentTickCommands();
 					renderer.render();
 				} else {
-					System.out.println("Out of redos - pausing");
+					//System.out.println("Out of redos - pausing");
 					fastForward = false;
 					pause();
 				}

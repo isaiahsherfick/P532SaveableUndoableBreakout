@@ -10,13 +10,13 @@ package game.engine;
 
 import collision.detection.ObjectCollidable;
 import collision.detection.ScreenCollidable;
-import command.pattern.CommandListener;
+import save_and_load.Saveable;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
 //Abstract class GameObject
 //Handles only position, velocity, and movement information
-public abstract class GameObject extends DrawObject implements ScreenCollidable, ObjectCollidable {
+public abstract class GameObject extends DrawObject implements ScreenCollidable, ObjectCollidable, Saveable {
 	
 	protected Point2D previousPosition;
     protected Point2D velocity;
@@ -78,5 +78,11 @@ public abstract class GameObject extends DrawObject implements ScreenCollidable,
     
     public Point2D getLowerRight(Point2D position) {
         return new Point2D(getCenter(position).getX() + dimensions.getX() / 2, getCenter(position).getY() + dimensions.getY() / 2);
+    }
+    
+    //Return a string containing the state of the GameObject
+    public String save()
+    {
+    	
     }
 }
