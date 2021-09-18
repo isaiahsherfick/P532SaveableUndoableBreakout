@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import breakout.Ball;
+import breakout.*;
 import game.engine.GameObject;
 import javafx.geometry.Point2D;
 import movement.behaviors.SimpleMovement;
@@ -87,8 +87,55 @@ class TestSaveAndLoad
     	b3.load(saveObj);
     	assertEquals(b3,b2);
     	assertEquals(b3,b1);
-    			
     }
+
+    @Test
+    void savePaddleTest()
+    {
+    	//Create a new paddle, change its velocity from the default
+    	Paddle b1 = new Paddle();
+    	b1.setVelocity(new Point2D(2,5));
+    	b1.setPosition(new Point2D(69, 420));
+    	
+    	//Save it
+    	JSONObject saveObj = b1.save();
+
+    	Paddle b2 = new Paddle();
+    	assertNotEquals(b1,b2);
+    	b2.load(saveObj);
+    	assertTrue(b1 instanceof Paddle);
+    	assertTrue(b2 instanceof Paddle);
+    	assertEquals(b1,b2);
+    	
+    	Paddle b3 = new Paddle();
+    	b3.load(saveObj);
+    	assertEquals(b3,b2);
+    	assertEquals(b3,b1);
+    }
+    @Test
+    void saveBrickTest()
+    {
+    	//Create a new paddle, change its velocity from the default
+    	Brick b1 = new Brick();
+    	b1.setVelocity(new Point2D(2,5));
+    	b1.setPosition(new Point2D(69, 420));
+    	
+    	//Save it
+    	JSONObject saveObj = b1.save();
+
+    	Brick b2 = new Brick();
+    	assertNotEquals(b1,b2);
+    	b2.load(saveObj);
+    	assertTrue(b1 instanceof Brick);
+    	assertTrue(b2 instanceof Brick);
+    	assertEquals(b1,b2);
+    	
+    	Brick b3 = new Brick();
+    	b3.load(saveObj);
+    	assertEquals(b3,b2);
+    	assertEquals(b3,b1);
+    }
+    
     @Test
     //Passes
     void SimpleMovementSaveTest()
