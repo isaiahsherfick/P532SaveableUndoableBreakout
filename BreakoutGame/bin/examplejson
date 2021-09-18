@@ -1,0 +1,22 @@
+
+
+
+
+
+{
+    "ball": { 
+        "moveBehaviour": {
+            ...
+        }
+        "speed":"200f",
+        "isFireBall":"false",
+        "fireBallBeginDelta":"null"
+        "drawBehaviour": {
+            "DrawCircle": "null"
+        }
+            //if the ball was a square instead
+        "drawBehaviour": {
+            "DrawSquare": "null"
+        }
+    }
+}

@@ -1,16 +1,15 @@
 package save_and_load;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import breakout.Ball;
+import breakout.Brick;
 import game.engine.GameObject;
 import javafx.geometry.Point2D;
 import movement.behaviors.SimpleMovement;
@@ -19,6 +18,7 @@ import rendering.DrawCircle;
 import rendering.DrawSpecialBrick;
 import rendering.DrawSquare;
 import rendering.DrawText;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TestSaveAndLoad 
 {
@@ -89,6 +89,27 @@ class TestSaveAndLoad
     	assertEquals(b3,b1);
     			
     }
+    
+    @Test
+    void saveBrickTest() 
+    {
+    	//Create a new ball, change its velocity from the default
+    	Brick brick = new Brick();
+    	brick.setPosition(new Point2D(20, 100));
+    	brick.setDimensions(new Point2D(100,40));
+    	
+    	//Save it
+    	JSONObject saveObj = brick.save();
+
+    	Brick brick2 = new Brick();
+    	assertNotEquals(brick,brick2);
+    	brick2.load(saveObj);
+    	assertTrue(brick instanceof Brick);
+    	assertTrue(brick2 instanceof Brick);
+    	assertEquals(brick,brick2);
+    			
+    }
+    
     @Test
     //Passes
     void SimpleMovementSaveTest()
