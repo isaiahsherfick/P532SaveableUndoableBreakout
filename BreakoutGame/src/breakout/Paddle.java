@@ -115,6 +115,9 @@ public class Paddle extends GameObject implements Clickable {
 	{
 		JSONObject obj = new JSONObject();
 		
+		//Put the type of the object into the JSON
+		obj.put("type","Paddle");
+		
 		//Save basic data types first
 		obj.put("speed", speed);
 		

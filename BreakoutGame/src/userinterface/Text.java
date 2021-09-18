@@ -5,6 +5,8 @@
  **/
 package userinterface;
 
+import org.json.simple.JSONObject;
+
 import game.engine.Drawable;
 import game.engine.UIObject;
 import javafx.geometry.Point2D;
@@ -62,5 +64,19 @@ public class Text extends UIObject {
 	
 	@Override
 	public void update(double timeDelta) {
+		
 	}
+	
+	public JSONObject save()
+	{
+		System.out.println("Don't call save on a Text object!!!");
+		return new JSONObject();
+	}
+	
+	public void load(JSONObject data)
+	{
+		System.out.println("Don't call load on a Text object!!!");
+	}
+	
+	
 }

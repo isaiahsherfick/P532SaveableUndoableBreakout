@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import game.engine.*;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import movement.behaviors.*;
 import rendering.*;
 
@@ -34,6 +35,7 @@ public interface Saveable
     //member of the corresponding class
     public void load(JSONObject saveData);
     
+    //DEPRECATED
     public static JSONArray loadNestedJSON(String nestedJSONString) 
     {
     	JSONParser parser = new JSONParser();
@@ -142,6 +144,23 @@ public interface Saveable
 				 break;
 	    }
     	return drawBehaviour;
+    }
+    
+    @SuppressWarnings("unchecked")
+	public static JSONObject saveFont(Font f)
+    {
+    	String fontName = f.getName();
+    	double fontSize = f.getSize();
+    	JSONObject obj = new JSONObject();
+    	obj.put("name",fontName);
+    	obj.put("size",fontSize);
+    	return obj;
+    }
+    public static Font loadFont(JSONObject data)
+    {
+    	String fontName = (String)data.get("name");
+    	double fontSize = (double)data.get("size");
+    	return new Font(fontName,fontSize);
     }
     
     

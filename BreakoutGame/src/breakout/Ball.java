@@ -123,6 +123,9 @@ public class Ball extends GameObject implements Saveable{
 	public JSONObject save()
 	{
 		JSONObject obj = new JSONObject();
+		//Put the type at the start of the JSON
+		obj.put("type","Ball");
+		
 		//These are basic data types
 		obj.put("speed", speed);
         obj.put("isFireBall",isFireBall);

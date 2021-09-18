@@ -77,9 +77,11 @@ public class Brick extends GameObject implements Saveable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject save() {
-		// TODO Auto-generated method stub
 		
 		JSONObject obj1 = new JSONObject();
+		
+		//Put the type of the object at the start of the JSON
+		obj1.put("type","Brick");
 		
 		obj1.put("color",Saveable.saveColor(color));
 
@@ -89,7 +91,7 @@ public class Brick extends GameObject implements Saveable {
         obj1.put("previousPosition", Saveable.savePoint2D(previousPosition));
         obj1.put("drawBehaviour", drawBehaviour.save());
         //obj1.put("brickDestroyedListener", brickDestroyedListener.save());
-        obj1.put("collider",Saveable.saveColor(color));
+        obj1.put("color",Saveable.saveColor(color));
         
 		return obj1;
 	}
@@ -105,7 +107,7 @@ public class Brick extends GameObject implements Saveable {
 		 JSONObject drawBehaviourObj = (JSONObject)saveData.get("drawBehaviour");
 		 drawBehaviour = Saveable.getDrawBehaviour(drawBehaviourObj);
 		 
-		 color = Saveable.loadColor((JSONObject)saveData.get("collider"));
+		 color = Saveable.loadColor((JSONObject)saveData.get("color"));
 		// TODO Auto-generated method stub
 		
 	}

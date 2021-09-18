@@ -6,9 +6,15 @@
 
 package save_and_load;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import breakout.*;
 import game.engine.GameObject;
@@ -23,12 +29,12 @@ public class SaveAndLoadManager
     //Save information will be stored as an arraylist of strings which each individual game object will be responsible for providing, one string per object
     private ArrayList<String> saveData; 
 
-    private ArrayList<GameObject> gameObjects;
+    private ArrayList<Saveable> saveObjects;
 
     //Default constructor
     public SaveAndLoadManager()
     {
-        this.gameObjects = new ArrayList<>();   
+        this.saveObjects = new ArrayList<>();   
         this.saveData = new ArrayList<>();
 
         //TODO test this default directory on Windows
@@ -36,23 +42,23 @@ public class SaveAndLoadManager
     }
 
     //add each gameobject in an arraylist to the SaveAndLoadManager
-    public void addGameObjects(ArrayList<GameObject> objectsToAdd)
+    public void addSaveObjects(ArrayList<Saveable> objectsToAdd)
     {
         for (int i = 0; i < objectsToAdd.size(); i++)
         {
-            gameObjects.add(objectsToAdd.get(i));
+            saveObjects.add(objectsToAdd.get(i));
         }
     }
 
     //add a single gameobject to the SaveAndLoadManager
-    public void addGameObject(GameObject objectToAdd)
+    public void addSaveObject(Saveable objectToAdd)
     {
-        gameObjects.add(objectToAdd);
+        saveObjects.add(objectToAdd);
     }
 
-    public ArrayList<GameObject> getGameObjects()
+    public ArrayList<Saveable> getSaveObjects()
     {
-        return gameObjects;
+        return saveObjects;
     }
     
     //Save all objects in the SaveAndLoadManager
@@ -61,31 +67,59 @@ public class SaveAndLoadManager
     {
     	JSONObject obj = new JSONObject();
     	
-    	for (int i = 0; i < gameObjects.size(); i++)
+    	for (int i = 0; i < saveObjects.size(); i++)
     	{
-    		GameObject g = gameObjects.get(i);
+    		Saveable g = saveObjects.get(i);
     		JSONObject newObj = g.save();
-    		if (g instanceof Ball)
-    		{
-    			obj.put("Ball",newObj);
-    		}
-    		else if (g instanceof Paddle)
-    		{
-    			obj.put("Paddle",newObj);
-    		}
-    		else if (g instanceof Brick)
-    		{
-    			obj.put("Brick",newObj);
-    		}
+    		obj.put(String.format("%d",i),newObj);
     	}
-
     	return obj;
     }
     
     //Populate GameObjects array using the JSONObject created by save()
-    public void load(JSONObject saveObj)
+    @SuppressWarnings("unchecked")
+	public void load(JSONObject saveObj)
     {
-    	
+		for(Iterator<String> iterator = saveObj.keySet().iterator(); iterator.hasNext();) 
+		{
+			  String key = (String) iterator.next();
+			  JSONObject val = (JSONObject) saveObj.get(key);
+			  String type = (String)val.get("type");
+			  switch(type)
+			  {
+					case "Ball":
+						Ball b = new Ball();
+						b.load(val);
+						saveObjects.add(b);
+						break;
+					case "Paddle":
+						Paddle p = new Paddle();
+						p.load(val);
+						saveObjects.add(p);
+						break;
+					case "Brick":
+						Brick br = new Brick();
+						br.load(val);
+						saveObjects.add(br);
+						break;
+					case "DigitalTimer":
+						DigitalTimer dt = new DigitalTimer();
+						dt.load(val);
+						saveObjects.add(dt);
+						break;
+					case "SpecialBrick":
+						SpecialBrick sb = new SpecialBrick();
+						sb.load(val);
+						saveObjects.add(sb);
+						break;
+					
+					default:
+						System.out.println("Unknown key encountered in SaveAndLoadManager.load()");
+						System.out.println("Put an exception here to actually debug it");
+						break;
+			  }
+
+		}
     }
     
     

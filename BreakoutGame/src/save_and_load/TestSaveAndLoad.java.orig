@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
 
+<<<<<<< HEAD
 import breakout.*;
+=======
 import breakout.Ball;
 import breakout.Brick;
+>>>>>>> origin/snehal_save_load
 import game.engine.GameObject;
 import javafx.geometry.Point2D;
 import movement.behaviors.SimpleMovement;
@@ -30,27 +33,27 @@ class TestSaveAndLoad
         SaveAndLoadManager s = new SaveAndLoadManager();
 
         //create gameobjects arraylist to test against
-        ArrayList<Saveable> saveObjects = new ArrayList<>();
+        ArrayList<GameObject> gameObjects = new ArrayList<>();
 
         //balls for the gameobjects arraylist
         Ball b1 = new Ball();
         Ball b2 = new Ball();
-        saveObjects.add(b1);
-        saveObjects.add(b2);
+        gameObjects.add(b1);
+        gameObjects.add(b2);
 
         //pass the arraylist to the SaveAndLoadManager
-        s.addSaveObjects(saveObjects);
-        for (int i = 0; i < s.getSaveObjects().size(); i++)
+        s.addGameObjects(gameObjects);
+        for (int i = 0; i < s.getGameObjects().size(); i++)
         {
             //assert that it contains the same balls that we passed it
-            assertEquals(saveObjects.get(i), s.getSaveObjects().get(i));
+            assertEquals(gameObjects.get(i), s.getGameObjects().get(i));
         }
         //make another ball to test the addGameObject method
         Ball b3 = new Ball();
-        s.addSaveObject(b3);
+        s.addGameObject(b3);
 
         //assert that this method also works as expected
-        assertEquals(b3,s.getSaveObjects().get(2));
+        assertEquals(b3,s.getGameObjects().get(2));
 	}
 
     @Test
@@ -89,6 +92,7 @@ class TestSaveAndLoad
     	assertEquals(b3,b2);
     	assertEquals(b3,b1);
     }
+<<<<<<< HEAD
 
     @Test
     void savePaddleTest()
@@ -135,10 +139,10 @@ class TestSaveAndLoad
     	b3.load(saveObj);
     	assertEquals(b3,b2);
     	assertEquals(b3,b1);
-    }
+=======
     
     @Test
-    void saveBrickTestSnehal() 
+    void saveBrickTest() 
     {
     	//Create a new ball, change its velocity from the default
     	Brick brick = new Brick();
@@ -154,6 +158,8 @@ class TestSaveAndLoad
     	assertTrue(brick instanceof Brick);
     	assertTrue(brick2 instanceof Brick);
     	assertEquals(brick,brick2);
+    			
+>>>>>>> origin/snehal_save_load
     }
     
     @Test
@@ -199,7 +205,7 @@ class TestSaveAndLoad
         SaveAndLoadManager s = new SaveAndLoadManager();
 
         //create gameobjects arraylist to test against
-        ArrayList<Saveable> saveObjects = new ArrayList<>();
+        ArrayList<GameObject> gameObjects = new ArrayList<>();
 
     	Ball b1 = new Ball();
     	b1.setVelocity(new Point2D(40,50));
@@ -209,41 +215,12 @@ class TestSaveAndLoad
     	b2.setPosition(new Point2D(20,400));
     	Paddle p = new Paddle();
     	p.setPosition(new Point2D(1,2));
-    	Brick br = new Brick();
-    	br.setPosition(new Point2D(2,2));
     	
-    	DigitalTimer dt = new DigitalTimer();
-    	dt.setFinalTime(55.00);
-    	
-    	SpecialBrick sb = new SpecialBrick();
-    	sb.setPosition(new Point2D(1,2));
-    	
-    	saveObjects.add(b1);
-    	saveObjects.add(b2);
-    	saveObjects.add(p);
-    	saveObjects.add(br);
-    	saveObjects.add(dt);
-    	saveObjects.add(sb);
-    	
-    	s.addSaveObjects(saveObjects);
+    	gameObjects.add(b1);
+    	gameObjects.add(b2);
+    	gameObjects.add(p);
     	
     	JSONObject saveObj = s.save();
-    	
-    	//Create a second s&lM to load the first's JSON stuff
-    	SaveAndLoadManager s2 = new SaveAndLoadManager();
-    	
-    	//Populate s2's gameobjects array
-    	s2.load(saveObj);
-    	System.out.print(saveObj);
-    	
-    	ArrayList<Saveable> sArray = s.getSaveObjects();
-    	ArrayList<Saveable> s2Array = s2.getSaveObjects();
-    	
-    	assertEquals(sArray.size(), s2Array.size());
-    	for (int i = 0; i < sArray.size(); i++)
-    	{
-    		assertEquals(sArray.get(i),s2Array.get(i));
-    	}
     	
     }
     
