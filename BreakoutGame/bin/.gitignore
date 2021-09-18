@@ -1,6 +1,11 @@
-/collision/
-/game/
 /application/
 /breakout/
+/collision/
 /command/
+/game/
+/input/
+/movement/
+/observer/
 /rendering/
+/save_and_load/
+/userinterface/
