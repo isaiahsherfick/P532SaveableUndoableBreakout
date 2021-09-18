@@ -8,6 +8,8 @@ package save_and_load;
 
 import java.util.ArrayList;
 
+import org.json.simple.JSONObject;
+
 import game.engine.GameObject;
 
 //Class to manage saves and loads
@@ -52,14 +54,28 @@ public class SaveAndLoadManager
         return gameObjects;
     }
     
+    //Save all objects in the SaveAndLoadManager
+    public JSONObject save()
+    {
+    	JSONObject obj = new JSONObject();
+    	return obj;
+    }
+    
     
     //ORDER OF LOADING IS VERY IMPORTANT
     //None of the objects will have a reference to the CommandInvoker
     //CommandInvoker must be restored FIRST, then each time an object is instantiated
     //Its setCommandListener() method needs called on the commandinvoker
     //This is the only way to prevent creating a copy of the commandinvoker for each object
-    public void load()
+    //Objects that do this: Ball,
+    
+    //Similarly, anything containing a reference to GameManager will not save that
+    //Reference to their JSON! Therefore those objects will also need to manually
+    //have that reference added after instantiation
+    //Objects that do this: Paddle,
+    public void load(String pathToFile)
     {
+    	//TODO
     }
 }
 

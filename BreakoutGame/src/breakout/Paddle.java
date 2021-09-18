@@ -2,11 +2,13 @@
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
  * @editors: Isaiah Sherfick
- * Last modified on: 14 Sep 2021
+ * Last modified on: 18 Sep 2021
  * Last modified by: Isaiah Sherfick
- * Changes: Added comments
+ * Changes: Added Save/Load functionality
  **/
 package breakout;
+
+import org.json.simple.JSONObject;
 
 import command.pattern.PaddleMoveCommand;
 import game.engine.Drawable;
@@ -17,6 +19,9 @@ import input.SpawnBallListener;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import movement.behaviors.SimpleMovement;
+import rendering.DrawSquare;
+import save_and_load.Saveable;
 import userinterface.Clickable;
 
 public class Paddle extends GameObject implements Clickable {
@@ -28,6 +33,9 @@ public class Paddle extends GameObject implements Clickable {
 
 	public Paddle() {
 		super();
+		//default move and draw behavior
+		this.moveBehaviour = new SimpleMovement();
+		this.drawBehaviour = new DrawSquare();
 	}
 	
 	public Paddle(Drawable drawBehaviour, Color color, int locationX, int locationY, int width, int height, Movable moveBehaviour) {
@@ -70,6 +78,11 @@ public class Paddle extends GameObject implements Clickable {
 		previousPosition = position;
 		position = newPosition;
 	}
+	
+	public double getSpeed()
+	{
+		return speed;
+	}
 
     //When the paddle collides with another object
 	@Override
@@ -95,5 +108,57 @@ public class Paddle extends GameObject implements Clickable {
 	
 	public void setSpawnBallListener(SpawnBallListener listener) {
 		spawnBallListener = listener;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject save()
+	{
+		JSONObject obj = new JSONObject();
+		
+		//Save basic data types first
+		obj.put("speed", speed);
+		
+		//Save nested JSON objects without a save() method using the appropriate static
+		//method in the Saveable interface.
+		obj.put("color", Saveable.saveColor(color));
+		obj.put("position", Saveable.savePoint2D(position));
+		obj.put("dimensions",Saveable.savePoint2D(dimensions));
+		obj.put("previousPosition",Saveable.savePoint2D(previousPosition));
+		obj.put("velocity",Saveable.savePoint2D(velocity));
+		obj.put("moveDirection",Saveable.savePoint2D(moveDirection));
+		
+		//Save nested JSON objects with their corresponding save() method
+		obj.put("moveBehaviour",moveBehaviour.save());
+		obj.put("drawBehaviour",drawBehaviour.save());
+		
+		//Return the JSONObject
+		return obj;
+	}
+	
+	public void load(JSONObject data)
+	{
+		speed = (double)data.get("speed");
+		color = Saveable.loadColor((JSONObject)data.get("color"));
+		position = Saveable.loadPoint2D((JSONObject)data.get("position"));
+		dimensions = Saveable.loadPoint2D((JSONObject)data.get("dimensions"));
+		previousPosition = Saveable.loadPoint2D((JSONObject)data.get("previousPosition"));
+		velocity = Saveable.loadPoint2D((JSONObject)data.get("velocity"));
+		moveDirection = Saveable.loadPoint2D((JSONObject)data.get("moveDirection"));
+		
+		JSONObject moveBehaviourObj = (JSONObject)data.get("moveBehaviour");
+		JSONObject drawBehaviourObj = (JSONObject)data.get("drawBehaviour");
+		
+		moveBehaviour = Saveable.getMoveBehaviour(moveBehaviourObj);
+		drawBehaviour = Saveable.getDrawBehaviour(drawBehaviourObj);
+	}
+	
+	public boolean equals(Object o)
+	{
+		if (o instanceof Paddle)
+		{
+			Paddle b = (Paddle)o;
+			return speed == b.getSpeed() && velocity.equals(b.getVelocity()) && position.equals(b.getPosition());
+		}
+		return false;
 	}
 }

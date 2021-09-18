@@ -172,4 +172,30 @@ class TestSaveAndLoad
     	assertNotEquals(Saveable.getJSONString(ob3),Saveable.getJSONString(ob5));
     }
     
+    //This one needs to grow as we develop
+    @Test
+    void SaveEverythingTest()
+    {
+        SaveAndLoadManager s = new SaveAndLoadManager();
+
+        //create gameobjects arraylist to test against
+        ArrayList<GameObject> gameObjects = new ArrayList<>();
+
+    	Ball b1 = new Ball();
+    	b1.setVelocity(new Point2D(40,50));
+    	b1.setPosition(new Point2D(400,20));
+    	Ball b2 = new Ball();
+    	b2.setVelocity(new Point2D(50,40));
+    	b2.setPosition(new Point2D(20,400));
+    	Paddle p = new Paddle();
+    	p.setPosition(new Point2D(1,2));
+    	
+    	gameObjects.add(b1);
+    	gameObjects.add(b2);
+    	gameObjects.add(p);
+    	
+    	s.save()
+    	
+    }
+    
 }

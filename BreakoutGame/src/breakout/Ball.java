@@ -41,7 +41,7 @@ public class Ball extends GameObject implements Saveable{
 
 	public Ball() {
 		super();
-		//default move behavior
+		//default move and draw behavior
 		this.moveBehaviour = new SimpleMovement();
 		this.drawBehaviour = new DrawCircle();
 	}
@@ -128,6 +128,8 @@ public class Ball extends GameObject implements Saveable{
         obj.put("isFireBall",isFireBall);
 
         //These create nested JSON objects
+        
+        //Use the static method in Saveable for colors
         obj.put("color",Saveable.saveColor(color));
 
         //Use the static method in Saveable for point2ds
