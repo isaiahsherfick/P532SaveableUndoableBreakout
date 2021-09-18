@@ -5,10 +5,13 @@
  **/
 package rendering;
 
+import org.json.simple.JSONObject;
+
 import game.engine.DrawObject;
 import game.engine.Drawable;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import save_and_load.BadSaveStringException;
 
 public class DrawCircle implements Drawable {
 
@@ -22,5 +25,16 @@ public class DrawCircle implements Drawable {
         // debug center calculation
 //        context.setFill(Color.MAGENTA);
 //        context.fillRect(object.getCenter().getX(), object.getCenter().getY(), 2, 2);
+	}
+	
+	public JSONObject save()
+	{
+		JSONObject save = new JSONObject();
+		save.put("DrawCircle","null");
+	}
+	
+	public void load(JSONObject saveData) throws BadSaveStringException
+	{
+		
 	}
 }

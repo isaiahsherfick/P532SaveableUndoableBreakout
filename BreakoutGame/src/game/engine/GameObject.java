@@ -80,9 +80,4 @@ public abstract class GameObject extends DrawObject implements ScreenCollidable,
         return new Point2D(getCenter(position).getX() + dimensions.getX() / 2, getCenter(position).getY() + dimensions.getY() / 2);
     }
     
-    //Return a string containing the state of the GameObject
-    public String save()
-    {
-    	
-    }
 }

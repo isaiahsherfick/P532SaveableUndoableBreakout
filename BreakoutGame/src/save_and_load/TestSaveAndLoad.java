@@ -1,10 +1,21 @@
 package save_and_load;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
+
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
+
 import breakout.Ball;
+import game.engine.DrawObject;
 import game.engine.GameObject;
+import javafx.geometry.Point2D;
+import rendering.DrawText;
+import save_and_load.BadSaveStringException;
 
 class TestSaveAndLoad 
 {
@@ -41,32 +52,62 @@ class TestSaveAndLoad
     @Test
     void saveTest()
     {
-        SaveAndLoadManager s = new SaveAndLoadManager();
-        DrawObject d = new DrawObject
-        s.addGameObject(b1);
-        //save to saveTest.brkout
-        s.save("saveTest.brkout");
-        //Open the file
-        File saveFile = File.open("saveTest.brkout","r");
-        //Assert its contents and the ball's save string are the same
-        assertEquals(saveFile.read(),b1.save());
+        //SaveAndLoadManager s = new SaveAndLoadManager();
+        ////save to saveTest.brkout
+        //s.save("saveTest.brkout");
+        ////Open the file
+        //File saveFile = File.open("saveTest.brkout","r");
+        ////Assert its contents and the ball's save string are the same
+        //assertEquals(saveFile.read(),b1.save());
     }
 
     @Test
-    void drawableSaveTest()
+    //TODO
+    void saveBallTest() 
     {
-        DrawObject d = DrawObject();
-        String expected1 = "expected string";
-        //Ensure that the string is what we expect
-        assertEquals(d.save(),expected1);
+    	//Create a new ball, change its velocity from the default
+    	Ball b1 = new Ball();
+    	b1.setVelocity(new Point2D(2,5));
+    	b1.setPosition(new Point2D(69, 420));
+    	
+    	//Save it
+    	JSONObject b1Save = b1.save();
+    	StringWriter out = new StringWriter();
+    	try {
+			b1Save.writeJSONString(out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	String saveString = out.toString();
+    	System.out.println(saveString);
 
-        //Ensure that load is working properly
-        DrawObject l = DrawObject();
-        l.load(d.save());
-        assertEquals(d,l);
-
-        DrawText  dt = DrawText();
-        String expected1 = "expected string";
-        assertEquals(d.save(),expected2)
+    	Ball b2 = new Ball();
+    	assertNotEquals(b1,b2);
+		b2.load(saveString);
+    	assertEquals(b1,b2);
     }
+    
+    //void savePoint2DTest()
+    //{
+    	////Create new p2d
+    	//Point2D p = new Point2D(5,6);
+    	//
+    	////Save it
+    	//JSONObject p1Save = p.save();
+    	//StringWriter out = new StringWriter();
+    	//try {
+			//p1Save.writeJSONString(out);
+		//} catch (IOException e) {
+			//// TODO Auto-generated catch block
+			//e.printStackTrace();
+		//}
+    	//String saveString = out.toString();
+    	//System.out.println(saveString);
+//
+    	//Point2D p2 = new Point2D(1,1);
+    	//assertNotEquals(p,p2);
+    	//p2.load(saveString);
+    	//assertEquals(p,p2);
+    //}
 }

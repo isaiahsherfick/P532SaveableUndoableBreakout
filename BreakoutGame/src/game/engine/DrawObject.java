@@ -87,47 +87,4 @@ public abstract class DrawObject implements Observer, Saveable {
     public Drawable getDrawBehaviour() {
         return drawBehaviour;
     }
-	
-	//Return a string describing the state of the drawobject
-	public String save()
-	{
-		String returnString = "";
-		returnString += "commandListener=" + commandListener.save() + ";";
-		returnString += "drawBehvaiour=" drawBehaviour.save() + ";";
-		returnString += "position="+position.getX() + "," + position.getY() +");";
-		returnString += "dimensions="+dimensions.getX() + "," + dimensions.getY() +");";
-        returnString += "color="+color.getColor();
-	}
-
-    //Restore the state of a DrawObject that has been saved from its saveString
-    //Call on a freshly default constructed DrawObject
-    public Saveable load(String saveString) throws BadSaveStringException
-    {
-        String[] stringSplit = saveString.split(";");
-        if (stringSplit.length != 5)
-            throw new BadSaveStringException("DrawObject SaveString isn't of length 5");
-
-        //if our first object isn't the commandListener information
-        if (stringSplit[0].split("=")[0] != "commandListener")
-            throw new BadSaveStringException("Expected CommandListener details");
-        CommandListener c = new CommandListener();
-        c.load(stringSplit[0]);
-        this.commandListener = c;
-        if (stringSplit[1] != "")
-            throw new BadSaveStringException("bad saveString!");
-
-
-    }
-
-    @Override
-    //For save/load testing purposes
-    public boolean equals(Object o)
-    {
-        if (o instanceof DrawObject)
-        {
-        	DrawObject d = (DrawObject)o;
-            return commandListener.equals(d.getCommandListener()) && drawBehaviour.equals(d.getDrawBehaviour()) && position.equals(d.getPosition()) && dimensions.equals(d.getDimensions()) && color.equals(d.getColor());
-        }
-        return false;
-    }
 }

@@ -8,19 +8,27 @@
  **/
 package breakout;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import command.pattern.BallMoveCommand;
+import command.pattern.CommandListener;
 import game.engine.Drawable;
 import game.engine.GameObject;
 import game.engine.Movable;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import save_and_load.Saveable;
 
-public class Ball extends GameObject {
+public class Ball extends GameObject implements Saveable{
 	
     //Move strategy object
 	protected Movable moveBehaviour;
 //	private final static int SPEED_INCREMENT = 15;
 	private double speed = 200f;
+
 	
 	private boolean isFireBall;
 
@@ -87,6 +95,11 @@ public class Ball extends GameObject {
 //		increaseSpeed()
 	}
 	
+	public double getSpeed()
+	{
+		return speed;
+	}
+	
 	public boolean isFireBall() {
 		return isFireBall;
 	}
@@ -98,5 +111,75 @@ public class Ball extends GameObject {
 //	private void increaseSpeed() {
 //		speed += SPEED_INCREMENT;
 //	}
+	@SuppressWarnings("unchecked")
+	public JSONObject save()
+	{
+		JSONObject obj = new JSONObject();
+		//These are basic data types
+		obj.put("speed", speed);
+        obj.put("isFireBall",isFireBall);
+
+        //These create nested JSON objects
+        obj.put("color",Saveable.saveColor(color));
+
+        //Use the static method in Saveable for point2ds
+        obj.put("position",Saveable.savePoint2D(position));
+        obj.put("dimensions",Saveable.savePoint2D(dimensions));
+        obj.put("previousPosition", Saveable.savePoint2D(previousPosition));
+        obj.put("Velocity",  Saveable.savePoint2D(velocity));
+        obj.put("moveDirection",  Saveable.savePoint2D(moveDirection));
+        
+        //These all need their own save method
+        //To create another nested JSON object
+		obj.put("moveBehaviour",moveBehaviour);
+        obj.put("drawBehaviour",drawBehaviour);
+        obj.put("commandListener", commandListener);
+        return obj;
+	}
+	public void load(String saveData) 
+	{
+		JSONParser parser = new JSONParser();
+		try
+		{
+	         Object obj = parser.parse(saveData);
+	         JSONArray array = (JSONArray)obj;
+
+	         moveBehaviour = (Movable) array.get("moveBehavior");
+	         //etc
+	         speed = (double) array.get(1);
+	         isFireBall = (boolean) array.get(2);
+	         drawBehaviour = (Drawable) array.get(3);
+	         color = (Color) array.get(4);
+
+	         JSONArray positionArray = Saveable.loadNestedJSON((String)array.get(5));
+	         int x = (int)positionArray.get(0);
+	         int y = (int)positionArray.get(1);
+	         position = new Point2D(x,y);
+
+	         dimensions = (Point2D) array.get(6);
+	         commandListener = (CommandListener)array.get(7);
+	         previousPosition = (Point2D) array.get(8);
+	         velocity = (Point2D) array.get(9);
+	         moveDirection = (Point2D) array.get(10);
+		}	
+		catch(ParseException pe) 
+		{
+			System.out.println("position: " + pe.getPosition());
+			System.out.println(pe);
+	    }
+	}
+	
+	@Override
+	//simple equals override that only checks a few variables
+	//for testing purposes
+	public boolean equals(Object o)
+	{
+		if (o instanceof Ball)
+		{
+			Ball b = (Ball) o;
+			return speed == b.getSpeed() && velocity == b.getVelocity() && position == b.getPosition();
+		}
+		return false;
+	}
 
 }

@@ -1,5 +1,11 @@
 TODO: 
+
+Point2D:
+    factor out Point2D class since it's not saveable, 
+    create our own custom game/engine/Point.java class
+
 save/load:
+    
     TestSaveAndLoad.java:
         -write test for DrawObject.save()
         -write test for DrawText.save()
