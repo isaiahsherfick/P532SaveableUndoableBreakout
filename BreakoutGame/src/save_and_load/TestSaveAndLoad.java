@@ -51,4 +51,22 @@ class TestSaveAndLoad
         //Assert its contents and the ball's save string are the same
         assertEquals(saveFile.read(),b1.save());
     }
+
+    @Test
+    void drawableSaveTest()
+    {
+        DrawObject d = DrawObject();
+        String expected1 = "expected string";
+        //Ensure that the string is what we expect
+        assertEquals(d.save(),expected1);
+
+        //Ensure that load is working properly
+        DrawObject l = DrawObject();
+        l.load(d.save());
+        assertEquals(d,l);
+
+        DrawText  dt = DrawText();
+        String expected1 = "expected string";
+        assertEquals(d.save(),expected2)
+    }
 }

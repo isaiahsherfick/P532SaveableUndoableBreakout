@@ -11,6 +11,11 @@ save/load:
 
     DrawObject.java:
         -implement save()
+            -implement commandListener.save()
+            -implement Draw*.save()
+        -implement load()
+            -implement commandListener.load()
+            -implement Draw*.load()
     
     BreakoutObject.java:
         -implement save()
