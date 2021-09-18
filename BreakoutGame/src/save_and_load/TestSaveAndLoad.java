@@ -194,7 +194,7 @@ class TestSaveAndLoad
     	gameObjects.add(b2);
     	gameObjects.add(p);
     	
-    	s.save()
+    	JSONObject saveObj = s.save();
     	
     }
     

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 
+import breakout.*;
 import game.engine.GameObject;
 
 //Class to manage saves and loads
@@ -55,10 +56,36 @@ public class SaveAndLoadManager
     }
     
     //Save all objects in the SaveAndLoadManager
-    public JSONObject save()
+    @SuppressWarnings("unchecked")
+	public JSONObject save()
     {
     	JSONObject obj = new JSONObject();
+    	
+    	for (int i = 0; i < gameObjects.size(); i++)
+    	{
+    		GameObject g = gameObjects.get(i);
+    		JSONObject newObj = g.save();
+    		if (g instanceof Ball)
+    		{
+    			obj.put("Ball",newObj);
+    		}
+    		else if (g instanceof Paddle)
+    		{
+    			obj.put("Paddle",newObj);
+    		}
+    		else if (g instanceof Brick)
+    		{
+    			obj.put("Brick",newObj);
+    		}
+    	}
+
     	return obj;
+    }
+    
+    //Populate GameObjects array using the JSONObject created by save()
+    public void load(JSONObject saveObj)
+    {
+    	
     }
     
     
