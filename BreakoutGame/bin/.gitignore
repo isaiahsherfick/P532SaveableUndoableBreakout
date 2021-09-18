@@ -1,6 +1,13 @@
-/collision/
-/game/
+/ArchitectureDiagram.png
+/CommandPatternArchitecture.png
+/References.txt
 /application/
 /breakout/
+/collision/
 /command/
+/game/
+/input/
+/movement/
+/observer/
 /rendering/
+/userinterface/

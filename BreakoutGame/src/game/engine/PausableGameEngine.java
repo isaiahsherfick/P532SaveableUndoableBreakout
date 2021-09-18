@@ -20,9 +20,19 @@ import collision.detection.CollisionHandler2D;
 import command.pattern.CommandInvoker;
 import input.ClickPolling;
 import input.KeyPolling;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import observer.pattern.Observable;
 import observer.pattern.Observer;
@@ -63,15 +73,69 @@ public class PausableGameEngine implements Observable {
     
     private void instantiateGameCanvas() {
     	// Build root and canvas
-    	Group root = new Group();
+    	//Group root = new Group();
     	Canvas gameCanvas = new Canvas(800, 600);
-    	root.getChildren().add(gameCanvas);
+    	//root.getChildren().add(gameCanvas);
+    	
+    	BorderPane pane = new BorderPane();
+    	FlowPane flow2 = new FlowPane();
+    	
+    	//Assignment 2 Changes starts..
+    	GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setStyle("-fx-border-color: blue");
+        
+        
+        Text category = new Text("Control Panel");
+        category.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        grid.add(category, 1, 0); 
+        
+        GridPane gbtn1 = new GridPane();
+        gbtn1.add(new Button("Pause"), 1, 0);
+        grid.add(gbtn1,0,1);
+//        
+        GridPane gbtn2 = new GridPane();
+        gbtn2.add(new Button("Undo"), 1, 0);
+        grid.add(gbtn2,1,1);
+//        
+        GridPane gbtn3 = new GridPane();
+        gbtn3.add(new Button("Replay"), 1, 0);
+        grid.add(gbtn3,2,1);
+//        
+        GridPane gbtn4 = new GridPane();
+        gbtn4.add(new Button("Save"), 1, 0);
+        grid.add(gbtn4,3,1);
+        
+        GridPane gbtn5 = new GridPane();
+        gbtn5.add(new Button("Load"), 1, 0);
+        grid.add(gbtn5,4,1);
+        
+        GridPane gbtn6 = new GridPane();
+        MenuButton m = new MenuButton("Change Layout");
+        MenuItem m1 = new MenuItem("FlowLayout");
+	    MenuItem m2 = new MenuItem("GridLayout");
+	    MenuItem m3 = new MenuItem("BorderLayout");
+	  
+	        // add menu items to menu
+	        m.getItems().add(m1);
+	        m.getItems().add(m2);
+	        m.getItems().add(m3);
+	        gbtn6.add(m,1,0);
+	        grid.add(gbtn6,5,1);
+	        flow2.getChildren().add(gameCanvas);
+	        pane.setBottom(grid);
+	        pane.setCenter(flow2);
+
+
+    	
     	
     	// Give renderer the canvas
     	renderer.setCanvas(gameCanvas);
 
     	// Build scene and give it root
-    	Scene gameScene = new Scene(root);
+    	Scene gameScene = new Scene(pane);
     	this.gameScene = gameScene;
     	gameStage.setScene(gameScene);
     	
