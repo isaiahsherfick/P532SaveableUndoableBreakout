@@ -27,14 +27,15 @@ public class DrawCircle implements Drawable {
 //        context.fillRect(object.getCenter().getX(), object.getCenter().getY(), 2, 2);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public JSONObject save()
 	{
-		JSONObject save = new JSONObject();
-		save.put("DrawCircle","null");
+		JSONObject obj = new JSONObject();
+		obj.put("drawStrategy","DrawCircle");
+		return obj;
 	}
-	
-	public void load(JSONObject saveData) throws BadSaveStringException
+	public void load(JSONObject loadString)
 	{
-		
+		return;
 	}
 }

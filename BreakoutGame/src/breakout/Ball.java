@@ -8,6 +8,9 @@
  **/
 package breakout;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,6 +23,8 @@ import game.engine.GameObject;
 import game.engine.Movable;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import movement.behaviors.SimpleMovement;
+import rendering.DrawCircle;
 import save_and_load.Saveable;
 
 public class Ball extends GameObject implements Saveable{
@@ -36,6 +41,9 @@ public class Ball extends GameObject implements Saveable{
 
 	public Ball() {
 		super();
+		//default move behavior
+		this.moveBehaviour = new SimpleMovement();
+		this.drawBehaviour = new DrawCircle();
 	}
 	
 	public Ball(Drawable drawBehaviour, Color color, int locationX, int locationY, int width, int height, Movable moveBehaviour) {
@@ -126,58 +134,48 @@ public class Ball extends GameObject implements Saveable{
         obj.put("position",Saveable.savePoint2D(position));
         obj.put("dimensions",Saveable.savePoint2D(dimensions));
         obj.put("previousPosition", Saveable.savePoint2D(previousPosition));
-        obj.put("Velocity",  Saveable.savePoint2D(velocity));
+        obj.put("velocity",  Saveable.savePoint2D(velocity));
         obj.put("moveDirection",  Saveable.savePoint2D(moveDirection));
         
         //These all need their own save method
         //To create another nested JSON object
-		obj.put("moveBehaviour",moveBehaviour);
-        obj.put("drawBehaviour",drawBehaviour);
-        obj.put("commandListener", commandListener);
+        
+        obj.put("moveBehaviour", moveBehaviour.save());
+        obj.put("drawBehaviour", drawBehaviour.save());
+        
+        //DO NOT SAVE COMMAND LISTENER IN SAVE() METHODS
+        //IT WILL BE SET IN THE SAVEANDLOADMANAGER LOAD() METHOD
+        //obj.put("commandListener", commandListener.save());
+        
         return obj;
 	}
-	public void load(String saveData) 
+	public void load(JSONObject saveData) 
 	{
-		JSONParser parser = new JSONParser();
-		try
-		{
-	         Object obj = parser.parse(saveData);
-	         JSONArray array = (JSONArray)obj;
-
-	         moveBehaviour = (Movable) array.get("moveBehavior");
-	         //etc
-	         speed = (double) array.get(1);
-	         isFireBall = (boolean) array.get(2);
-	         drawBehaviour = (Drawable) array.get(3);
-	         color = (Color) array.get(4);
-
-	         JSONArray positionArray = Saveable.loadNestedJSON((String)array.get(5));
-	         int x = (int)positionArray.get(0);
-	         int y = (int)positionArray.get(1);
-	         position = new Point2D(x,y);
-
-	         dimensions = (Point2D) array.get(6);
-	         commandListener = (CommandListener)array.get(7);
-	         previousPosition = (Point2D) array.get(8);
-	         velocity = (Point2D) array.get(9);
-	         moveDirection = (Point2D) array.get(10);
-		}	
-		catch(ParseException pe) 
-		{
-			System.out.println("position: " + pe.getPosition());
-			System.out.println(pe);
-	    }
+		 speed = (double)saveData.get("speed");
+		 isFireBall = (boolean)saveData.get("isFireBall");
+		 color = Saveable.loadColor((JSONObject)saveData.get("color"));
+		 position = Saveable.loadPoint2D((JSONObject)saveData.get("position"));
+		 dimensions = Saveable.loadPoint2D((JSONObject)saveData.get("dimensions"));
+		 previousPosition = Saveable.loadPoint2D((JSONObject)saveData.get("previousPosition"));
+		 velocity = Saveable.loadPoint2D((JSONObject)saveData.get("velocity"));
+		 moveDirection = Saveable.loadPoint2D((JSONObject)saveData.get("moveDirection"));
+		 
+		 JSONObject moveBehaviourObj = (JSONObject)saveData.get("moveBehaviour");
+		 moveBehaviour = Saveable.getMoveBehaviour(moveBehaviourObj);
+		 
+		 JSONObject drawBehaviourObj = (JSONObject)saveData.get("drawBehaviour");
+		 drawBehaviour = Saveable.getDrawBehaviour(drawBehaviourObj);
 	}
 	
-	@Override
 	//simple equals override that only checks a few variables
 	//for testing purposes
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o instanceof Ball)
 		{
 			Ball b = (Ball) o;
-			return speed == b.getSpeed() && velocity == b.getVelocity() && position == b.getPosition();
+			return speed == b.getSpeed() && velocity.equals(b.getVelocity()) && position.equals(b.getPosition());
 		}
 		return false;
 	}

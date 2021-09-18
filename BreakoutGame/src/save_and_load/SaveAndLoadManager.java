@@ -51,5 +51,15 @@ public class SaveAndLoadManager
     {
         return gameObjects;
     }
+    
+    
+    //ORDER OF LOADING IS VERY IMPORTANT
+    //None of the objects will have a reference to the CommandInvoker
+    //CommandInvoker must be restored FIRST, then each time an object is instantiated
+    //Its setCommandListener() method needs called on the commandinvoker
+    //This is the only way to prevent creating a copy of the commandinvoker for each object
+    public void load()
+    {
+    }
 }
 

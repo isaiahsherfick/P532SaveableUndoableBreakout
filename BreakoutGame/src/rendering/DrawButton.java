@@ -5,6 +5,8 @@
  **/
 package rendering;
 
+import org.json.simple.JSONObject;
+
 import game.engine.DrawObject;
 import game.engine.Drawable;
 import javafx.geometry.Point2D;
@@ -23,5 +25,17 @@ public class DrawButton implements Drawable {
         context.fillRect(objectPosition.getX(), objectPosition.getY(), objectDimensions.getX(), objectDimensions.getY());
         Text text = ((TextButton)drawMe).getText();
         text.performDraw(context);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject save()
+	{
+		JSONObject obj = new JSONObject();
+		obj.put("drawStrategy","DrawButton");
+		return obj;
+	}
+	public void load(JSONObject loadString)
+	{
+		return;
 	}
 }

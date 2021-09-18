@@ -5,6 +5,8 @@
  **/
 package rendering;
 
+import org.json.simple.JSONObject;
+
 import game.engine.DrawObject;
 import game.engine.Drawable;
 import javafx.geometry.Point2D;
@@ -22,5 +24,16 @@ public class DrawSquare implements Drawable {
         // debug center calculation
 //        context.setFill(Color.MAGENTA);
 //        context.fillRect(object.getCenter().getX(), object.getCenter().getY(), 2, 2);
+	}
+	@SuppressWarnings("unchecked")
+	public JSONObject save()
+	{
+		JSONObject obj = new JSONObject();
+		obj.put("drawStrategy","DrawSquare");
+		return obj;
+	}
+	public void load(JSONObject loadString)
+	{
+		return;
 	}
 }

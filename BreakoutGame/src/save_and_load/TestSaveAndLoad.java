@@ -11,11 +11,14 @@ import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import breakout.Ball;
-import game.engine.DrawObject;
 import game.engine.GameObject;
 import javafx.geometry.Point2D;
+import movement.behaviors.SimpleMovement;
+import rendering.DrawButton;
+import rendering.DrawCircle;
+import rendering.DrawSpecialBrick;
+import rendering.DrawSquare;
 import rendering.DrawText;
-import save_and_load.BadSaveStringException;
 
 class TestSaveAndLoad 
 {
@@ -62,7 +65,7 @@ class TestSaveAndLoad
     }
 
     @Test
-    //TODO
+    //PASSES!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     void saveBallTest() 
     {
     	//Create a new ball, change its velocity from the default
@@ -71,43 +74,55 @@ class TestSaveAndLoad
     	b1.setPosition(new Point2D(69, 420));
     	
     	//Save it
-    	JSONObject b1Save = b1.save();
-    	StringWriter out = new StringWriter();
-    	try {
-			b1Save.writeJSONString(out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	String saveString = out.toString();
-    	System.out.println(saveString);
+    	JSONObject saveObj = b1.save();
 
     	Ball b2 = new Ball();
     	assertNotEquals(b1,b2);
-		b2.load(saveString);
+    	b2.load(saveObj);
+    	assertTrue(b1 instanceof Ball);
+    	assertTrue(b2 instanceof Ball);
     	assertEquals(b1,b2);
+    	
+    	Ball b3 = new Ball();
+    	b3.load(saveObj);
+    	assertEquals(b3,b2);
+    	assertEquals(b3,b1);
+    			
+    }
+    @Test
+    //Passes
+    void SimpleMovementSaveTest()
+    {
+    	SimpleMovement s = new SimpleMovement();
+    	JSONObject saveObj = s.save();
+    	assertNotEquals(saveObj,new JSONObject());
+    	//System.out.println(Saveable.getJSONString(saveString));
     }
     
-    //void savePoint2DTest()
-    //{
-    	////Create new p2d
-    	//Point2D p = new Point2D(5,6);
-    	//
-    	////Save it
-    	//JSONObject p1Save = p.save();
-    	//StringWriter out = new StringWriter();
-    	//try {
-			//p1Save.writeJSONString(out);
-		//} catch (IOException e) {
-			//// TODO Auto-generated catch block
-			//e.printStackTrace();
-		//}
-    	//String saveString = out.toString();
-    	//System.out.println(saveString);
-//
-    	//Point2D p2 = new Point2D(1,1);
-    	//assertNotEquals(p,p2);
-    	//p2.load(saveString);
-    	//assertEquals(p,p2);
-    //}
+    @Test
+    void DrawableSaveTest()
+    {
+    	DrawText dt = new DrawText();
+    	DrawButton db = new DrawButton();
+    	DrawSpecialBrick dsb = new DrawSpecialBrick();
+    	DrawSquare ds = new DrawSquare();
+    	DrawCircle dc = new DrawCircle();
+    	
+    	JSONObject ob1 = dt.save();
+    	JSONObject ob2 = db.save();
+    	JSONObject ob3 = dsb.save();
+    	JSONObject ob4 = ds.save();
+    	JSONObject ob5 = dc.save();
+    	
+    	//.System.out.println(Saveable.getJSONString(ob1));
+    	//System.out.println(Saveable.getJSONString(ob2));
+    	//System.out.println(Saveable.getJSONString(ob3));
+    	//System.out.println(Saveable.getJSONString(ob4));
+    	//System.out.println(Saveable.getJSONString(ob5));
+    	
+    	assertNotEquals(Saveable.getJSONString(ob1),Saveable.getJSONString(ob2));
+    	assertNotEquals(Saveable.getJSONString(ob2),Saveable.getJSONString(ob4));
+    	assertNotEquals(Saveable.getJSONString(ob3),Saveable.getJSONString(ob5));
+    }
+    
 }
