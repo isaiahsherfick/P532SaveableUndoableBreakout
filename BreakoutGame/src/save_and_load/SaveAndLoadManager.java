@@ -80,8 +80,8 @@ public class SaveAndLoadManager
         this.pathToSaveFile = "./";
         
         //defaults for unit testing only
-        this.commandInvoker = new CommandInvoker();
-        this.gameManager = new GameManager();
+        this.commandInvoker = c;
+        this.gameManager = g;
     }
 
     //Constructor for the actual game with specified path 
@@ -93,8 +93,8 @@ public class SaveAndLoadManager
         this.pathToSaveFile = pathToSaveFile;
         
         //defaults for unit testing only
-        this.commandInvoker = new CommandInvoker();
-        this.gameManager = new GameManager();
+        this.commandInvoker = c;
+        this.gameManager = g;
     }
     //add each gameobject in an arraylist to the SaveAndLoadManager
     public void addSaveObjects(ArrayList<Saveable> objectsToAdd)
@@ -152,13 +152,7 @@ public class SaveAndLoadManager
     //None of the objects will have a reference to the CommandInvoker
     //CommandInvoker must be restored FIRST, then each time an object is instantiated
     //Its setCommandListener() method needs called on the commandinvoker
-    //This is the only way to prevent creating a copy of the commandinvoker for each object
-    //Objects that do this: Ball,
-    
-    //Similarly, anything containing a reference to GameManager will not save that
-    //Reference to their JSON! Therefore those objects will also need to manually
-    //have that reference added after instantiation
-    //Objects that do this: Paddle,
+    //This is the only way to prevent creating a copy of the CommandInvoker for each object
     //////////////////////////////////////////////////////////////////////////////
     @SuppressWarnings("unchecked")
 	public void load(JSONObject saveObj)
@@ -174,26 +168,32 @@ public class SaveAndLoadManager
 						Ball b = new Ball();
 						b.load(val);
 						saveObjects.add(b);
+						b.setCommandListener(commandInvoker);
 						break;
 					case "Paddle":
 						Paddle p = new Paddle();
 						p.load(val);
 						saveObjects.add(p);
+						p.setCommandListener(commandInvoker);
+						//TODO point paddle to gamemanager etc
 						break;
 					case "Brick":
 						Brick br = new Brick();
 						br.load(val);
 						saveObjects.add(br);
+						br.setCommandListener(commandInvoker);
 						break;
 					case "DigitalTimer":
 						DigitalTimer dt = new DigitalTimer();
 						dt.load(val);
 						saveObjects.add(dt);
+						dt.setCommandListener(commandInvoker);
 						break;
 					case "SpecialBrick":
 						SpecialBrick sb = new SpecialBrick();
 						sb.load(val);
 						saveObjects.add(sb);
+						sb.setCommandListener(commandInvoker);
 						break;
 					
 					default:
@@ -214,6 +214,11 @@ public class SaveAndLoadManager
     	JSONParser parser = new JSONParser();
     	JSONObject JObj = (JSONObject)parser.parse(fileContent);
     	load(JObj);
+    }
+    
+    public CommandInvoker getCommandInvoker()
+    {
+    	return commandInvoker;
     }
 }
 

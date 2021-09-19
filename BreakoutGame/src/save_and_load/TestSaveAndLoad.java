@@ -382,6 +382,8 @@ class TestSaveAndLoad
     	GameManager gm = new GameManager();
 
         SaveAndLoadManager s = new SaveAndLoadManager(ci,gm,"../saves/");
+        
+        assertEquals(s.getCommandInvoker(), ci);
 
         //create gameobjects arraylist to test against
         ArrayList<Saveable> saveObjects = new ArrayList<>();
@@ -411,5 +413,35 @@ class TestSaveAndLoad
     	saveObjects.add(sb);
     	
     	s.addSaveObjects(saveObjects);
+    	
+    	try 
+    	{
+			s.saveFile();
+		} 
+    	catch (IOException e) 
+    	{
+    		e.printStackTrace();
+		}
+    	
+    	SaveAndLoadManager s2 = new SaveAndLoadManager(ci,gm,"../saves/");
+    	try 
+    	{
+			s2.loadFile();
+		} catch (IOException | ParseException e) 
+    	{
+			e.printStackTrace();
+		}
+    	saveObjects = s2.getSaveObjects();
+    	for (int i = 0; i < saveObjects.size(); i++)
+    	{
+    		//assert that we have successfully pointed to the same commandinvoker
+    		//after loading for each of the saveables
+    		if (saveObjects.get(i) instanceof GameObject)
+    		{
+    			GameObject go = (GameObject)saveObjects.get(i);
+    			System.out.println(go);
+    			assertEquals(go.getCommandListener(),ci);
+    		}
+    	}
     }
 }
