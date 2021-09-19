@@ -5,6 +5,8 @@
  **/
 package userinterface;
 
+import org.json.simple.JSONObject;
+
 import game.engine.Drawable;
 import game.engine.UIObject;
 import javafx.geometry.Point2D;
@@ -47,5 +49,16 @@ public class TextButton extends UIObject implements Clickable {
 	@Override
 	public void onClick() {
 		// Override at creation
+	}
+	
+	public JSONObject save()
+	{
+		System.out.println("Don't call save on a TextButton object!!!");
+		return new JSONObject();
+	}
+	
+	public void load(JSONObject saveObj)
+	{
+		
 	}
 }

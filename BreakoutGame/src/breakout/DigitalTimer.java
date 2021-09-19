@@ -78,7 +78,24 @@ public class DigitalTimer extends Text {
 	public void load(JSONObject data)
 	{
 		fontName = (String)data.get("fontName");
-		fontSize = (int)data.get("fontSize");
+		
+		//Weird edge case that needs handled
+		//This arises because of how some test cases
+		//pass a JSONObject directly and load it 
+		//Where others save to a file first and read from there
+		//For some reason it auto-casts the fontsize to a Long
+		//and we get typecast errors
+		Object fontSizeObj = data.get("fontSize");
+		if (fontSizeObj instanceof Long)
+		{
+			Long l = (Long)fontSizeObj;
+			fontSize = l.intValue();
+		}
+		else
+		{
+			fontSize = (int)data.get("fontSize");
+		}
+
 		position = Saveable.loadPoint2D((JSONObject)data.get("position"));
 		dimensions = Saveable.loadPoint2D((JSONObject)data.get("dimensions"));
 		color = Saveable.loadColor((JSONObject)data.get("color"));

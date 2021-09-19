@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.*;
 
 import breakout.*;
@@ -60,19 +61,6 @@ class TestSaveAndLoad
 	}
 
     @Test
-    void saveTest()
-    {
-        //SaveAndLoadManager s = new SaveAndLoadManager();
-        ////save to saveTest.brkout
-        //s.save("saveTest.brkout");
-        ////Open the file
-        //File saveFile = File.open("saveTest.brkout","r");
-        ////Assert its contents and the ball's save string are the same
-        //assertEquals(saveFile.read(),b1.save());
-    }
-
-    @Test
-    //PASSES!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     void saveBallTest() 
     {
     	//Create a new ball, change its velocity from the default
@@ -234,7 +222,6 @@ class TestSaveAndLoad
     	}
     }
     
-    //This one needs to grow as we develop
     @Test
     void SaveEverythingTest()
     {
@@ -276,7 +263,7 @@ class TestSaveAndLoad
     	
     	//Populate s2's gameobjects array
     	s2.load(saveObj);
-    	System.out.print(saveObj);
+    	//System.out.print(saveObj);
     	
     	ArrayList<Saveable> sArray = s.getSaveObjects();
     	ArrayList<Saveable> s2Array = s2.getSaveObjects();
@@ -286,7 +273,6 @@ class TestSaveAndLoad
     	{
     		assertEquals(sArray.get(i),s2Array.get(i));
     	}
-    	
     }
     
     @Test
@@ -335,19 +321,62 @@ class TestSaveAndLoad
     	
     	assertEquals(fileContent,expectedString);
     	
-        SaveAndLoadManager s2 = new SaveAndLoadManager("./saves/save.json");
-        s2.addSaveObjects(saveObjects);
-        JSONObject s2Obj = s2.save();
-        expectedString = s2Obj.toString();
-        s2.saveFile();
-    	path = FileSystems.getDefault().getPath("./saves/", "save.json");
-    	fileContent = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);	
-    	
-    	assertEquals(fileContent, expectedString);
+    	//directory that doesn't exist
+    	try
+    	{
+			SaveAndLoadManager s2 = new SaveAndLoadManager("./fdsafsaew/save.json");
+			s2.addSaveObjects(saveObjects);
+			JSONObject s2Obj = s2.save();
+			expectedString = s2Obj.toString();
+			s2.saveFile();
+			path = FileSystems.getDefault().getPath("./fdsafsaew/", "save.json");
+			fileContent = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);	
+			
+			//we don't want to reach this
+			assertFalse(true);
+    	}
+    	catch(IOException e)
+    	{
+    		
+    	}
+    	//directory exists on isaiah's machine
+		SaveAndLoadManager s2 = new SaveAndLoadManager("./saves/save.json");
+		s2.addSaveObjects(saveObjects);
+		JSONObject s2Obj = s2.save();
+		expectedString = s2Obj.toString();
+		s2.saveFile();
+		path = FileSystems.getDefault().getPath("./saves/", "save.json");
+		fileContent = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);	
+		assertEquals(fileContent, expectedString);
+    }
+    
+    @Test 
+    void LoadFileTest()
+    {
+    	SaveAndLoadManager s1 = new SaveAndLoadManager("./saves/save.json");
+    	try 
+    	{
+			s1.loadFile();
+		} 
+    	catch (IOException | ParseException e) 
+    	{
+			assertTrue(false);
+		}
+    	assertTrue(s1.getSaveObjects().size() != 0);
+    	SaveAndLoadManager s2 = new SaveAndLoadManager("./fdsafhjdskahui/save.json");
+    	try 
+    	{
+			s2.loadFile();
+			assertTrue(false);
+		} 
+    	catch (IOException | ParseException e) 
+    	{
+
+		}
     }
     
     @Test
-    void SaveAndLoadFileTest()
+    void SaveAndLoadFileTestWithCommandInovkerAndGameManager()
     {
     	CommandInvoker ci = new CommandInvoker();
     	GameManager gm = new GameManager();
@@ -382,8 +411,5 @@ class TestSaveAndLoad
     	saveObjects.add(sb);
     	
     	s.addSaveObjects(saveObjects);
-    	
-    	
     }
-    
 }

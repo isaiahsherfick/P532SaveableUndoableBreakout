@@ -10,6 +10,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -131,26 +135,31 @@ public class SaveAndLoadManager
     //pathToSaveFile
     //Throws a bunch of exceptions that we want to stop execution
     //So we're declaring it like this
-    public void saveFile() 
+    public void saveFile() throws IOException
     {
     	JSONObject saveJSON = save();
-    	try
-    	{
-			File file = new File(pathToSaveFile);
-			file.createNewFile();
-			FileWriter fileWriter = new FileWriter(pathToSaveFile);
-			fileWriter.write(saveJSON.toString());
-			fileWriter.flush();
-			fileWriter.close();
-    	}
-    	catch(IOException e)
-    	{
-    		System.out.println("IOException in S&L manager");
-    		e.printStackTrace();
-    	}
+		File file = new File(pathToSaveFile);
+		file.createNewFile();
+		FileWriter fileWriter = new FileWriter(pathToSaveFile);
+		fileWriter.write(saveJSON.toString());
+		fileWriter.flush();
+		fileWriter.close();
     }
     
     //Populate GameObjects array using the JSONObject created by save()
+    ///////////////////////////////////////////////////////////////////////
+    //ORDER OF LOADING IS VERY IMPORTANT
+    //None of the objects will have a reference to the CommandInvoker
+    //CommandInvoker must be restored FIRST, then each time an object is instantiated
+    //Its setCommandListener() method needs called on the commandinvoker
+    //This is the only way to prevent creating a copy of the commandinvoker for each object
+    //Objects that do this: Ball,
+    
+    //Similarly, anything containing a reference to GameManager will not save that
+    //Reference to their JSON! Therefore those objects will also need to manually
+    //have that reference added after instantiation
+    //Objects that do this: Paddle,
+    //////////////////////////////////////////////////////////////////////////////
     @SuppressWarnings("unchecked")
 	public void load(JSONObject saveObj)
     {
@@ -192,25 +201,19 @@ public class SaveAndLoadManager
 						System.out.println("Put an exception here to actually debug it");
 						break;
 			  }
-
 		}
     }
     
     
-    //ORDER OF LOADING IS VERY IMPORTANT
-    //None of the objects will have a reference to the CommandInvoker
-    //CommandInvoker must be restored FIRST, then each time an object is instantiated
-    //Its setCommandListener() method needs called on the commandinvoker
-    //This is the only way to prevent creating a copy of the commandinvoker for each object
-    //Objects that do this: Ball,
-    
-    //Similarly, anything containing a reference to GameManager will not save that
-    //Reference to their JSON! Therefore those objects will also need to manually
-    //have that reference added after instantiation
-    //Objects that do this: Paddle,
-    public void loadFile(String pathToFile)
+    //Read the file stored at pathToSaveFile and 
+    //call load() on it
+    public void loadFile() throws IOException, ParseException
     {
-    	//TODO
+    	Path path = FileSystems.getDefault().getPath(pathToSaveFile);
+    	String fileContent = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);	
+    	JSONParser parser = new JSONParser();
+    	JSONObject JObj = (JSONObject)parser.parse(fileContent);
+    	load(JObj);
     }
 }
 
