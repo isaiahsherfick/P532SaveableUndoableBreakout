@@ -10,6 +10,7 @@ package command.pattern;
 
 import breakout.Ball;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 
 //Command for moving the ball
 public class BallMoveCommand implements Command {
@@ -30,6 +31,9 @@ public class BallMoveCommand implements Command {
 	private boolean undoFireBall;
 	private boolean redoFireBall;
 	
+	private Color undoColor;
+	private Color redoColor;
+	
 	public BallMoveCommand(Ball ball, double timeDelta) {
 		this.ball = ball;
 		this.timeDelta = timeDelta;
@@ -45,6 +49,7 @@ public class BallMoveCommand implements Command {
 		undoMoveDirection = ball.getMoveDirection();
 		undoDimensions = ball.getDimensions();
 		undoFireBall = ball.isFireBall();
+		undoColor = ball.getColor();
 		
         //Move the ball
 		ball.performMove(timeDelta);
@@ -56,6 +61,7 @@ public class BallMoveCommand implements Command {
 		redoMoveDirection = ball.getMoveDirection();
 		redoDimensions = ball.getDimensions();
 		redoFireBall = ball.isFireBall();
+		redoColor = ball.getColor();
 	}
 
     //Undo the move
@@ -68,6 +74,7 @@ public class BallMoveCommand implements Command {
 		ball.setMoveDirection(undoMoveDirection);
 		ball.setDimensions(undoDimensions);
 		ball.setFireBall(undoFireBall);
+		ball.setColor(undoColor);
 	}
 	
 	@Override 
@@ -80,6 +87,7 @@ public class BallMoveCommand implements Command {
 		ball.setMoveDirection(redoMoveDirection);
 		ball.setDimensions(redoDimensions);
 		ball.setFireBall(redoFireBall);
+		ball.setColor(redoColor);
 	}
 
 	@Override
