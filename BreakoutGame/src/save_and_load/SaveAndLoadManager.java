@@ -6,6 +6,8 @@
 
 package save_and_load;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import breakout.*;
+import command.pattern.CommandInvoker;
 import game.engine.GameObject;
 
 //Class to manage saves and loads
@@ -24,23 +27,71 @@ import game.engine.GameObject;
 //as well as parsing and processing them. This includes instantiating each of the saved objects
 public class SaveAndLoadManager
 {
-    private String pathToSaveDirectory;
+    private String pathToSaveFile;
 
     //Save information will be stored as an arraylist of strings which each individual game object will be responsible for providing, one string per object
     private ArrayList<String> saveData; 
 
     private ArrayList<Saveable> saveObjects;
+    
+    //Needs a reference to these two so we can 
+    //pass them to restored objects when necessary
+    private CommandInvoker commandInvoker;
+    private GameManager gameManager;
 
-    //Default constructor
+    //Default constructor for unit testing only
     public SaveAndLoadManager()
     {
         this.saveObjects = new ArrayList<>();   
         this.saveData = new ArrayList<>();
 
         //TODO test this default directory on Windows
-        this.pathToSaveDirectory = "./";
+        this.pathToSaveFile = "./save.json";
+        
+        //defaults for unit testing only
+        this.commandInvoker = new CommandInvoker();
+        this.gameManager = new GameManager();
     }
 
+    //Constructor for testing with just the specified path 
+    public SaveAndLoadManager(String pathToSaveFile)
+    {
+        this.saveObjects = new ArrayList<>();   
+        this.saveData = new ArrayList<>();
+
+        this.pathToSaveFile = pathToSaveFile;
+        
+        //defaults for unit testing only
+        this.commandInvoker = new CommandInvoker();
+        this.gameManager = new GameManager();
+    }
+
+    //Constructor for the actual game with default path 
+    public SaveAndLoadManager(CommandInvoker c, GameManager g)
+    {
+        this.saveObjects = new ArrayList<>();   
+        this.saveData = new ArrayList<>();
+
+        //TODO test this default directory on Windows
+        this.pathToSaveFile = "./";
+        
+        //defaults for unit testing only
+        this.commandInvoker = new CommandInvoker();
+        this.gameManager = new GameManager();
+    }
+
+    //Constructor for the actual game with specified path 
+    public SaveAndLoadManager(CommandInvoker c, GameManager g, String pathToSaveFile)
+    {
+        this.saveObjects = new ArrayList<>();   
+        this.saveData = new ArrayList<>();
+
+        this.pathToSaveFile = pathToSaveFile;
+        
+        //defaults for unit testing only
+        this.commandInvoker = new CommandInvoker();
+        this.gameManager = new GameManager();
+    }
     //add each gameobject in an arraylist to the SaveAndLoadManager
     public void addSaveObjects(ArrayList<Saveable> objectsToAdd)
     {
@@ -74,6 +125,29 @@ public class SaveAndLoadManager
     		obj.put(String.format("%d",i),newObj);
     	}
     	return obj;
+    }
+    
+    //Save the JSONObject created by save() to the file at
+    //pathToSaveFile
+    //Throws a bunch of exceptions that we want to stop execution
+    //So we're declaring it like this
+    public void saveFile() 
+    {
+    	JSONObject saveJSON = save();
+    	try
+    	{
+			File file = new File(pathToSaveFile);
+			file.createNewFile();
+			FileWriter fileWriter = new FileWriter(pathToSaveFile);
+			fileWriter.write(saveJSON.toString());
+			fileWriter.flush();
+			fileWriter.close();
+    	}
+    	catch(IOException e)
+    	{
+    		System.out.println("IOException in S&L manager");
+    		e.printStackTrace();
+    	}
     }
     
     //Populate GameObjects array using the JSONObject created by save()
@@ -134,7 +208,7 @@ public class SaveAndLoadManager
     //Reference to their JSON! Therefore those objects will also need to manually
     //have that reference added after instantiation
     //Objects that do this: Paddle,
-    public void load(String pathToFile)
+    public void loadFile(String pathToFile)
     {
     	//TODO
     }

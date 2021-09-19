@@ -1,2 +1,0 @@
-{"moveBehaviour":null,"color":0xff00ffff,"commandListener":null,"drawBehaviour":null,"moveDirection":Point2D [x = 0.0, y = 0.0],"isFireBall":false,"position":Point2D [x = 0.0, y = 0.0],"previousPosition":Point2D [x = 0.0, y = 0.0],"Velocity":Point2D [x = 2.0, y = 5.0],"speed":200.0,"dimensions":Point2D [x = 0.0, y = 0.0]}
-

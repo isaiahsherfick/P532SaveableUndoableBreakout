@@ -1,8 +1,13 @@
 package save_and_load;
 
 import java.io.File;
+import java.util.Random;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
@@ -11,6 +16,7 @@ import org.junit.jupiter.api.*;
 import breakout.*;
 import breakout.Ball;
 import breakout.Brick;
+import command.pattern.*;
 import game.engine.GameObject;
 import javafx.geometry.Point2D;
 import movement.behaviors.SimpleMovement;
@@ -192,6 +198,42 @@ class TestSaveAndLoad
     	assertNotEquals(Saveable.getJSONString(ob3),Saveable.getJSONString(ob5));
     }
     
+    @Test
+    //As this test was being written, 
+    //The impossibility of this problem given the current command
+    //architecture in conjunction with the current save architecture
+    //dawned on us. If you are ambitious enough to try rewriting both
+    //and hacking it together, I hope you enjoy savefiles in the GBs
+    void SaveCommandInvokerTest()
+    {
+    	Random r = new Random();
+    	int randint;
+    	CommandInvoker invoker = new CommandInvoker();
+    	for (int i=0; i < 1000; i++)
+    	{
+    		randint = r.nextInt(7);
+    		Command newCommand;
+    		switch(randint)
+    		{
+    			case 0:
+    				break;
+    			case 1:
+    				break;
+    			case 2:
+    				break;
+    			case 3:
+    				break;
+    			case 5:
+    				break;
+    			case 6:
+    				break;
+    			case 7:
+    				break;
+    			default:
+    		}
+    	}
+    }
+    
     //This one needs to grow as we develop
     @Test
     void SaveEverythingTest()
@@ -244,6 +286,103 @@ class TestSaveAndLoad
     	{
     		assertEquals(sArray.get(i),s2Array.get(i));
     	}
+    	
+    }
+    
+    @Test
+    void SaveFileTest() throws IOException
+    {
+        SaveAndLoadManager s = new SaveAndLoadManager();
+
+        //create gameobjects arraylist to test against
+        ArrayList<Saveable> saveObjects = new ArrayList<>();
+
+    	Ball b1 = new Ball();
+    	b1.setVelocity(new Point2D(40,50));
+    	b1.setPosition(new Point2D(400,20));
+    	Ball b2 = new Ball();
+    	b2.setVelocity(new Point2D(50,40));
+    	b2.setPosition(new Point2D(20,400));
+    	Paddle p = new Paddle();
+    	p.setPosition(new Point2D(1,2));
+    	Brick br = new Brick();
+    	br.setPosition(new Point2D(2,2));
+    	
+    	DigitalTimer dt = new DigitalTimer();
+    	dt.setFinalTime(55.00);
+    	
+    	SpecialBrick sb = new SpecialBrick();
+    	sb.setPosition(new Point2D(1,2));
+    	
+    	saveObjects.add(b1);
+    	saveObjects.add(b2);
+    	saveObjects.add(p);
+    	saveObjects.add(br);
+    	saveObjects.add(dt);
+    	saveObjects.add(sb);
+    	
+    	s.addSaveObjects(saveObjects);
+    	
+    	JSONObject saveObject = s.save();
+    	String expectedString = saveObject.toString();
+    	
+    	s.saveFile();
+    	
+    	//NOTE: on Linux, "./" is evaluating to /Team4-Week3/BreakoutGame/
+    	//TODO test on windows
+    	Path path = FileSystems.getDefault().getPath("./", "save.json");
+    	String fileContent = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);	
+    	
+    	assertEquals(fileContent,expectedString);
+    	
+        SaveAndLoadManager s2 = new SaveAndLoadManager("./saves/save.json");
+        s2.addSaveObjects(saveObjects);
+        JSONObject s2Obj = s2.save();
+        expectedString = s2Obj.toString();
+        s2.saveFile();
+    	path = FileSystems.getDefault().getPath("./saves/", "save.json");
+    	fileContent = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);	
+    	
+    	assertEquals(fileContent, expectedString);
+    }
+    
+    @Test
+    void SaveAndLoadFileTest()
+    {
+    	CommandInvoker ci = new CommandInvoker();
+    	GameManager gm = new GameManager();
+
+        SaveAndLoadManager s = new SaveAndLoadManager(ci,gm,"../saves/");
+
+        //create gameobjects arraylist to test against
+        ArrayList<Saveable> saveObjects = new ArrayList<>();
+
+    	Ball b1 = new Ball();
+    	b1.setVelocity(new Point2D(40,50));
+    	b1.setPosition(new Point2D(400,20));
+    	Ball b2 = new Ball();
+    	b2.setVelocity(new Point2D(50,40));
+    	b2.setPosition(new Point2D(20,400));
+    	Paddle p = new Paddle();
+    	p.setPosition(new Point2D(1,2));
+    	Brick br = new Brick();
+    	br.setPosition(new Point2D(2,2));
+    	
+    	DigitalTimer dt = new DigitalTimer();
+    	dt.setFinalTime(55.00);
+    	
+    	SpecialBrick sb = new SpecialBrick();
+    	sb.setPosition(new Point2D(1,2));
+    	
+    	saveObjects.add(b1);
+    	saveObjects.add(b2);
+    	saveObjects.add(p);
+    	saveObjects.add(br);
+    	saveObjects.add(dt);
+    	saveObjects.add(sb);
+    	
+    	s.addSaveObjects(saveObjects);
+    	
     	
     }
     
