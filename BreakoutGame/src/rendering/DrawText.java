@@ -5,6 +5,8 @@
  **/
 package rendering;
 
+import org.json.simple.JSONObject;
+
 import game.engine.DrawObject;
 import game.engine.Drawable;
 import javafx.geometry.Point2D;
@@ -21,5 +23,18 @@ public class DrawText implements Drawable {
         context.setFill(drawMe.getColor());
         context.setFont(text.getFont());
         context.fillText(text.getLabel(), objectPosition.getX(), objectPosition.getY());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject save()
+	{
+		JSONObject obj = new JSONObject();
+		obj.put("drawStrategy","DrawText");
+		return obj;
+	}
+	
+	public void load(JSONObject loadString)
+	{
+		return;
 	}
 }

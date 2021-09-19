@@ -96,7 +96,7 @@ public class InitDialog {
 			gameManager.start();
 			ClickPolling.getInstance().setClickables(gameManager.getClickables());
 			gameLoop.start();
-			System.out.println("Started your game");
+			//System.out.println("Started your game");
 		});
 
 	}
@@ -111,7 +111,7 @@ public class InitDialog {
 		gameManager.start();
 		ClickPolling.getInstance().setClickables(gameManager.getClickables());
 		gameLoop.start();
-		System.out.println("Started your game");
+		//System.out.println("Started your game");
 
 	}
 

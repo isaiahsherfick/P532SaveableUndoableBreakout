@@ -11,8 +11,10 @@ package command.pattern;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import save_and_load.Saveable;
+
 //Data structure to store a bunch of commands
-public class MacroCommand {
+public class MacroCommand implements Saveable{
 	
 	private Queue<Command> commands;
 	

@@ -5,6 +5,11 @@
  **/
 package movement.behaviors;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
+import org.json.simple.JSONObject;
+
 import game.engine.Movable;
 import javafx.geometry.Point2D;
 
@@ -28,5 +33,19 @@ public class SimpleMovement implements Movable {
 		}
 		
 		return new Point2D(horizontalVelocity, verticalVelocity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject save()
+	{
+		JSONObject obj = new JSONObject();
+		obj.put("movementStrategy","SimpleMovement");
+		return obj;
+	}
+	
+	//TODO
+	public void load(JSONObject saveString)
+	{
+		return;
 	}
 }

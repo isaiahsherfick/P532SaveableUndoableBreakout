@@ -2,19 +2,21 @@
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 4, 2021
  * @editors: Snehal Patare, Aditi Pednekar, Isaiah Sherfick
- * Last modified on: 15 Sep 2021
+ * Last modified on: 16 Sep 2021
  * Last modified by: Isaiah Sherfick
- * Changes: Added comments
+ * Changes: Implemented Saveable for save/load
  **/
 package game.engine;
 
 import command.pattern.CommandListener;
+import save_and_load.BadSaveStringException;
+import save_and_load.Saveable;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import observer.pattern.Observer;
 
-public abstract class DrawObject implements Observer {
+public abstract class DrawObject implements Observer, Saveable {
 	
     protected CommandListener commandListener;
 	protected Drawable drawBehaviour;
@@ -81,4 +83,8 @@ public abstract class DrawObject implements Observer {
 	public void setCommandListener(CommandListener listener) {
 		commandListener = listener;
 	}
+
+    public Drawable getDrawBehaviour() {
+        return drawBehaviour;
+    }
 }
