@@ -1,11 +1,10 @@
 /**
  * @author: Ed Eden-Rump
  * @CreationDate: Sep 1, 2021
- * @editors: Ethan Taylor Behar, Aditi Shivaji Pednekar, Isaiah Sherfick
- //* Last modified on: 15 Sep 2021
- //* Last modified by: Isaiah Sherfick
+ * @editors: Ethan Taylor Behar, Aditi Shivaji Pednekar, Isaiah Sherfick, Abhishek Tiwari
+ //* Last modified on: 19 Sep 2021
+ //* Last modified by: Abhishek Tiwari
  //* Changes: Added comments
- * @Info: Be warned Ed's code was bugged and needed to be fixed.
  * @References: 
  * https://github.com/edencoding/javafx-game-dev/blob/master/SpaceShooter/src/main/java/com/edencoding/animation/GameLoopTimer.java
  * https://github.com/edencoding/javafx-animation/blob/master/animation-timer-pause/src/main/java/com/edencoding/animation/PausableAnimationTimer.java
@@ -14,25 +13,19 @@
 package game.engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiFunction;
+
 import breakout.GameManager;
 import collision.detection.CollisionHandler2D;
 import command.pattern.CommandInvoker;
+import custom.layout.LayoutFunctions;
 import input.ClickPolling;
 import input.KeyPolling;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import observer.pattern.Observable;
 import observer.pattern.Observer;
@@ -57,7 +50,14 @@ public class PausableGameEngine implements Observable {
 	private Stage gameStage;
 	private Scene gameScene;
 	
-    public PausableGameEngine() {
+	private static Map<String, BiFunction<Renderer, GameManager, Scene>> layoutFunctionMap = new HashMap<>();
+	
+	private static final String FLOW_LAYOUT = "FLOW";
+	private static final String BORDER_LAYOUT = "BORDER";
+	
+	private String currentLayout;
+
+	public PausableGameEngine() {
     }    
     
     public PausableGameEngine(CommandInvoker commandInvoker, Renderer renderer, CollisionHandler2D collisionHandler, GameManager gameManager, Stage gameStage) {
@@ -66,76 +66,21 @@ public class PausableGameEngine implements Observable {
     	this.collisionHandler = collisionHandler;
     	this.gameManager = gameManager;
     	this.gameStage = gameStage;
+    	
+    	layoutFunctionMap.put(FLOW_LAYOUT, LayoutFunctions.flowLayoutManagerFunction);
+    	layoutFunctionMap.put(BORDER_LAYOUT, LayoutFunctions.borderLayoutManagerFunction);
+    	
 		instantiateGameCanvas();
 		observers = new ArrayList<Observer>();
 		instantiateGameLoop();
     }
     
     private void instantiateGameCanvas() {
-    	// Build root and canvas
-    	//Group root = new Group();
-    	Canvas gameCanvas = new Canvas(800, 600);
-    	//root.getChildren().add(gameCanvas);
+    	//If no layout is set, default is flow
+    	String currentLayout = Optional.ofNullable(this.getCurrentLayout()).orElse(FLOW_LAYOUT);
     	
-    	BorderPane pane = new BorderPane();
-    	FlowPane flow2 = new FlowPane();
+    	Scene gameScene = layoutFunctionMap.get(currentLayout).apply(renderer, gameManager);
     	
-    	//Assignment 2 Changes starts..
-    	GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setStyle("-fx-border-color: blue");
-        
-        
-        Text category = new Text("Control Panel");
-        category.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        grid.add(category, 1, 0); 
-        
-        GridPane gbtn1 = new GridPane();
-        gbtn1.add(new Button("Pause"), 1, 0);
-        grid.add(gbtn1,0,1);
-//        
-        GridPane gbtn2 = new GridPane();
-        gbtn2.add(new Button("Undo"), 1, 0);
-        grid.add(gbtn2,1,1);
-//        
-        GridPane gbtn3 = new GridPane();
-        gbtn3.add(new Button("Replay"), 1, 0);
-        grid.add(gbtn3,2,1);
-//        
-        GridPane gbtn4 = new GridPane();
-        gbtn4.add(new Button("Save"), 1, 0);
-        grid.add(gbtn4,3,1);
-        
-        GridPane gbtn5 = new GridPane();
-        gbtn5.add(new Button("Load"), 1, 0);
-        grid.add(gbtn5,4,1);
-        
-        GridPane gbtn6 = new GridPane();
-        MenuButton m = new MenuButton("Change Layout");
-        MenuItem m1 = new MenuItem("FlowLayout");
-	    MenuItem m2 = new MenuItem("GridLayout");
-	    MenuItem m3 = new MenuItem("BorderLayout");
-	  
-	        // add menu items to menu
-	        m.getItems().add(m1);
-	        m.getItems().add(m2);
-	        m.getItems().add(m3);
-	        gbtn6.add(m,1,0);
-	        grid.add(gbtn6,5,1);
-	        flow2.getChildren().add(gameCanvas);
-	        pane.setBottom(grid);
-	        pane.setCenter(flow2);
-
-
-    	
-    	
-    	// Give renderer the canvas
-    	renderer.setCanvas(gameCanvas);
-
-    	// Build scene and give it root
-    	Scene gameScene = new Scene(pane);
     	this.gameScene = gameScene;
     	gameStage.setScene(gameScene);
     	
@@ -147,7 +92,7 @@ public class PausableGameEngine implements Observable {
         gameStage.show();
         
         // Interesting... width and height isn't populated until gameStage.show() is called
-    	collisionHandler.setGameSceneDimensions(gameScene.getWidth(), gameScene.getHeight());
+    	collisionHandler.setGameSceneDimensions(850, 600);
     }
 
 	private void instantiateGameLoop() {
@@ -168,11 +113,23 @@ public class PausableGameEngine implements Observable {
     }
     
 	public void start() {
-        //Display the initial dialogue for the user
+        //Display the initial dialog for the user
 		InitDialog.showInitialDialog(gameStage, gameLoop, gameManager, this.gameScene);
 	}
 	
 	public void restart() {
+		reset();
+		start();
+	}
+	
+	public void restartWithLayout(String layout) {
+		reset();
+		setCurrentLayout(layout);
+		instantiateGameCanvas();
+		start();
+	}
+	
+	private void reset() {
 		// Restart the big 3
     	renderer.restart();
 		collisionHandler.restart();
@@ -188,8 +145,6 @@ public class PausableGameEngine implements Observable {
 		observers.clear();
 		observers = null;
 		observers = new ArrayList<Observer>();
-		
-		start();
 	}
 	
     //pause the game
@@ -365,5 +320,13 @@ public class PausableGameEngine implements Observable {
 		if (observerIndex >= 0) {
 			observers.remove(observerIndex);
 		}
+	}
+	
+	private String getCurrentLayout() {
+		return currentLayout;
+	}
+
+	private void setCurrentLayout(String currentLayout) {
+		this.currentLayout = currentLayout;
 	}
 }

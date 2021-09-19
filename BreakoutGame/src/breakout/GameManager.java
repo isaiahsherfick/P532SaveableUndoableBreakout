@@ -1,9 +1,9 @@
 /**
  * @author: Ethan Taylor Behar
  * @CreationDate: Sep 12, 2021
- * @editors: Aditi Pednekar, Snehal Patare, Isaiah Sherfick
- * Last modified on: 14 Sep 2021
- * Last modified by: Isaiah Sherfick
+ * @editors: Aditi Pednekar, Snehal Patare, Isaiah Sherfick, Abhishek Tiwari
+ * Last modified on: 19 Sep 2021
+ * Last modified by: Abhishek Tiwari
  * Changes: Added comments
  **/
 package breakout;
@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.json.simple.JSONObject;
+
 import collision.detection.BrickDestroyedListener;
 import command.pattern.BallSpawnCommand;
 import command.pattern.CommandListener;
@@ -23,14 +25,11 @@ import input.SpawnBallListener;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import movement.behaviors.SimpleMovement;
-import rendering.DrawButton;
 import rendering.DrawCircle;
 import rendering.DrawSpecialBrick;
 import rendering.DrawSquare;
 import rendering.DrawText;
 import userinterface.Clickable;
-import userinterface.Text;
-import userinterface.TextButton;
 
 /**
  * If we implement a level loader...
@@ -105,117 +104,19 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 	 * A bunch of click methods in this class?
 	 */
 	public void loadGame() {
-		// TODO encapsulate in a level loader component
-		// Since we only have 1 level
-		// It's reasonable to let it live here for now
-		// The moment we have multiple levels a level loader is necessary
-		// AND POOLING!
 		
 		stageFunctionMap.get(this.stageType).apply("Stage");
-
-		//BuildFunLevel();
-		//BuildSeriousLevel();
-		//BuildBallCollisionTests();
 		
         //Make the paddle
 		Paddle paddle = new Paddle(new DrawSquare(), Color.BLACK, 350, 550, 100, 10, new SimpleMovement());
 		paddle.setSpawnBallListener(this);
+		
         //Add it to the AllObjects ArrayList
 		addObject(paddle);
 
         //Make the clock, add it to allobjects
 		DigitalTimer clock = new DigitalTimer(new DrawText(), Color.BLACK, 1, 30, "Verdana", 30, "Timer: ");
 		addObject(clock);
-		
-        //Make the pause button
-		TextButton pauseButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(200, 7), new Point2D(60, 30), 
-				new Text(new DrawText(), Color.WHITE, 210, 25, "Verdana", 12, "Pause")) 
-				{ 
-                    //Supply it with onClick behavior
-					@Override 
-					public void onClick() {
-						gameEngine.pause();
-					} 
-				};
-		addObject(pauseButton);
-		
-        //Make the resumeButton
-		TextButton resumeButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(275, 7), new Point2D(60, 30), 
-				new Text(new DrawText(), Color.WHITE, 282, 25, "Verdana", 12, "Resume")) 
-				{ 
-                    //Supply it with onClick behavior
-					@Override 
-					public void onClick() {
-						gameEngine.resume();
-					} 
-				};
-		addObject(resumeButton);
-		
-        //Make the restartButton
-		TextButton restartButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(350, 7), new Point2D(60, 30), 
-				new Text(new DrawText(), Color.WHITE, 357, 25, "Verdana", 12, "Restart")) 
-				{ 
-					@Override 
-					public void onClick() {
-						gameEngine.restart();
-					} 
-				};
-		addObject(restartButton);
-		
-        //Make the undoButon
-		TextButton undoButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(425, 7), new Point2D(60, 30), 
-				new Text(new DrawText(), Color.WHITE, 432, 25, "Verdana", 12, "Undo")) 
-				{ 
-					@Override 
-					public void onClick() {
-						gameEngine.undo();
-					} 
-				};
-		addObject(undoButton);
-		
-        //Make the rewindButton
-		TextButton rewindButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(500, 7), new Point2D(60, 30), 
-				new Text(new DrawText(), Color.WHITE, 507, 25, "Verdana", 12, "Rewind")) 
-				{ 
-					@Override 
-					public void onClick() {
-						gameEngine.rewind();
-					} 
-				};
-		addObject(rewindButton);
-		
-        //Make the redobutton
-		TextButton redoButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(575, 7), new Point2D(60, 30), 
-				new Text(new DrawText(), Color.WHITE, 582, 25, "Verdana", 12, "Redo")) 
-				{ 
-					@Override 
-					public void onClick() {
-						gameEngine.redo();
-					} 
-				};
-		addObject(redoButton);
-		
-        //Make the fast forward button
-		TextButton fastForwardButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(650, 7), new Point2D(60, 45), 
-				new Text(new DrawText(), Color.WHITE, 657, 25, "Verdana", 12, "Fast\nForward")) 
-				{ 
-					@Override 
-					public void onClick() {
-						gameEngine.fastForward();
-					} 
-				};
-		addObject(fastForwardButton);
-		
-        //Make the replaybutton
-		TextButton replayButton = new TextButton(new DrawButton(), Color.BLACK, new Point2D(725, 7), new Point2D(60, 30), 
-				new Text(new DrawText(), Color.WHITE, 732, 25, "Verdana", 12, "Replay")) 
-				{ 
-					@Override 
-					public void onClick() {
-						gameEngine.replay();
-					} 
-				};
-		addObject(replayButton);
 	}
 
     //Add an object to the allObjects arraylist
@@ -472,5 +373,17 @@ public class GameManager implements BrickDestroyedListener, SpawnBallListener {
 			spawnNewBall();
 			
 			return true;
-		};	
+		};
+
+		@Override
+		public JSONObject save() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void load(JSONObject saveData) {
+			// TODO Auto-generated method stub
+			
+		}	
 }
