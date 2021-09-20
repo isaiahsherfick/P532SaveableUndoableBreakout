@@ -23,6 +23,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -46,7 +47,13 @@ public class LayoutFunctions {
 			false, false);
 	private static final Image REPLAY = new Image(CLASS_LOADER.getResourceAsStream("replay.png"), 15, 15, false, false);
 	private static final Image CHANGE = new Image(CLASS_LOADER.getResourceAsStream("change.png"), 15, 15, false, false);
+	
+	private static final Image SAVE = new Image(CLASS_LOADER.getResourceAsStream("download.png"), 15, 15, false, false);
+	private static final Image LOAD = new Image(CLASS_LOADER.getResourceAsStream("load.png"), 15, 15, false, false);
 
+	private static double orgSceneX, orgSceneY;
+	private static double orgTranslateX, orgTranslateY;
+	
 	static {
 		EVENT_HANDLER_MAP.put("Pause", new EventHandler<ActionEvent>() {
 			@Override
@@ -140,7 +147,7 @@ public class LayoutFunctions {
 		BorderPane pane = new BorderPane();
 		FlowPane gameFlow = new FlowPane();
 
-		CustomLayout customLayout = new CustomLayout();
+		CustomLayout customLayout = new CustomLayout(10, 30);
 		customLayout.addNewChild(createButton(gameManager, "Pause", PAUSE), 0, 1);
 		customLayout.addNewChild(createButton(gameManager, "Resume", RESUME), 1, 1);
 		customLayout.addNewChild(createButton(gameManager, "Restart", RESTART), 2, 1);
@@ -150,8 +157,8 @@ public class LayoutFunctions {
 		customLayout.addNewChild(createButton(gameManager, "FastForward", FAST_FORWARD), 6, 1);
 		customLayout.addNewChild(createButton(gameManager, "Replay", REPLAY), 7, 1);
 		
-		customLayout.addNewChild(createButton(gameManager, "Save", REPLAY), 8, 1);
-		customLayout.addNewChild(createButton(gameManager, "Load", REPLAY), 9, 1);
+		customLayout.addNewChild(createButton(gameManager, "Save", SAVE), 8, 1);
+		customLayout.addNewChild(createButton(gameManager, "Load", LOAD), 9, 1);
 
 		customLayout.addNewChild(createLayoutButton(gameManager, "Border", CHANGE), 10, 1);
 
@@ -176,7 +183,7 @@ public class LayoutFunctions {
 		BorderPane pane = new BorderPane();
 		FlowPane gameFlow = new FlowPane();
 
-		CustomLayout customLayout = new CustomLayout();
+		CustomLayout customLayout = new CustomLayout(30, 10);
 		customLayout.addNewChild(createButton(gameManager, "Pause", PAUSE), 1, 1);
 		customLayout.addNewChild(createButton(gameManager, "Resume", RESUME), 1, 3);
 		customLayout.addNewChild(createButton(gameManager, "Restart", RESTART), 1, 5);
@@ -213,18 +220,50 @@ public class LayoutFunctions {
 		GridPane gridPane = new GridPane();
 		Button button = new Button(actionType, new ImageView(image));
 		button.setOnAction(EVENT_HANDLER_MAP.get(actionType));
-		button.setDefaultButton(false);
-		//button.setFocusTraversable(false);
+		
+		button.setOnMousePressed(buttonMousePressedEventHandler);
+        button.setOnMouseDragged(buttonOnMouseDraggedEventHandler);
+		
+		button.setFocusTraversable(false);
 
 		gridPane.add(button, 1, 0);
 
 		return gridPane;
 	}
+	
+	static EventHandler<MouseEvent> buttonMousePressedEventHandler = new EventHandler<MouseEvent>() {
+
+	    @Override
+	    public void handle(MouseEvent t) {
+	        orgSceneX = t.getSceneX();
+	        orgSceneY = t.getSceneY();
+	        orgTranslateX = ((Button) (t.getSource())).getTranslateX();
+	        orgTranslateY = ((Button) (t.getSource())).getTranslateY();
+
+	        ((Button) (t.getSource())).toFront();
+	    }
+	};
+
+	static EventHandler<MouseEvent> buttonOnMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+
+	    @Override
+	    public void handle(MouseEvent t) {
+	        double offsetX = t.getSceneX() - orgSceneX;
+	        double offsetY = t.getSceneY() - orgSceneY;
+	        double newTranslateX = orgTranslateX + offsetX;
+	        double newTranslateY = orgTranslateY + offsetY;
+
+	        ((Button) (t.getSource())).setTranslateX(newTranslateX);
+	        ((Button) (t.getSource())).setTranslateY(newTranslateY);
+	    }
+	};
 
 	private static GridPane createLayoutButton(GameManager gameManager, String nextLayout, Image image) {
 		GridPane gridPane = new GridPane();
 		MenuButton menuButton = new MenuButton("Change Layout");
 		MenuItem item = new MenuItem(nextLayout);
+		
+		menuButton.setFocusTraversable(false);
 
 		item.setOnAction(EVENT_HANDLER_MAP.get(nextLayout));
 

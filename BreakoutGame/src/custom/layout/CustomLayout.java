@@ -18,11 +18,12 @@ public class CustomLayout extends GridPane {
 	
 	private List<GridPane> gridPanes = new ArrayList<>();
 	
-	public CustomLayout() {
-		super.setHgap(10);
-		super.setVgap(10);
+	public CustomLayout(int hGap, int vGap) {
+		super.setHgap(hGap);
+		super.setVgap(vGap);
 		super.setPadding(new Insets(10, 10, 10, 10));
 		super.setStyle("-fx-border-color: blue");
+		super.setStyle("-fx-background-color: lightblue");
 	}
 	
 	public boolean addNewChild(GridPane pane, int column, int row) {

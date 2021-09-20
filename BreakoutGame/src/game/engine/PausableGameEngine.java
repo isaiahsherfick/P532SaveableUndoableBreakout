@@ -37,6 +37,8 @@ import rendering.Renderer;
 import save_and_load.SaveAndLoadManager;
 import save_and_load.Saveable;
 
+import breakout.Paddle;
+
 public class PausableGameEngine implements Observable {
 
 	// Design Pattern Vars
@@ -254,6 +256,10 @@ public class PausableGameEngine implements Observable {
 			
 			saveableList.stream().forEach(object -> {
 				gameManager.addObject((Object) object);
+				
+				if (object instanceof Paddle) {
+					((Paddle)object).setSpawnBallListener(gameManager);
+				}
 			});
 			
 			resume();
