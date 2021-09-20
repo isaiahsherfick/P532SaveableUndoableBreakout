@@ -3,6 +3,8 @@
 
 Assignment 3 consists of building the same Breakout game as in Assignment 2. Additionally, we have to implement new features: Change Layout/Pause/Undo/Replay/Save/Load buttons.
 
+Add the json-simple-1.1.1.jar from project dir in your classpath to compile the project
+
 # Instructions To Run
 Built using the Eclipse IDE version 2021-16. Written in Java8 and JavaFX.
 

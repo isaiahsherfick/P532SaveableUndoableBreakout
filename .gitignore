@@ -1,0 +1,9 @@
+.DS_Store
+.metadata/*
+*.class
+BreakoutGame/bin/*
+/.classpath
+/ArchitectureDiagram.png
+/CommandPatternArchitecture.png
+/References.txt
+/userinterface/

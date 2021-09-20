@@ -9,7 +9,6 @@ package save_and_load;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -17,28 +16,35 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import breakout.*;
+import breakout.Ball;
+import breakout.Brick;
+import breakout.DigitalTimer;
+import breakout.GameManager;
+import breakout.Paddle;
+import breakout.SpecialBrick;
 import command.pattern.CommandInvoker;
-import game.engine.GameObject;
 
 //Class to manage saves and loads
 //This class is responsible for knowing where savefiles are stored
 //as well as parsing and processing them. This includes instantiating each of the saved objects
 public class SaveAndLoadManager
 {
-    private String pathToSaveFile;
+    public String pathToSaveFile;
 
     //Save information will be stored as an arraylist of strings which each individual game object will be responsible for providing, one string per object
     private ArrayList<String> saveData; 
 
     private ArrayList<Saveable> saveObjects;
     
-    //Needs a reference to these two so we can 
+    public void resetSaveObjects() {
+		this.saveObjects = new ArrayList<Saveable>();
+	}
+
+	//Needs a reference to these two so we can 
     //pass them to restored objects when necessary
     private CommandInvoker commandInvoker;
     private GameManager gameManager;
@@ -50,7 +56,7 @@ public class SaveAndLoadManager
         this.saveData = new ArrayList<>();
 
         //TODO test this default directory on Windows
-        this.pathToSaveFile = "./save.json";
+        this.pathToSaveFile = "save.json";
         
         //defaults for unit testing only
         this.commandInvoker = new CommandInvoker();
@@ -77,7 +83,7 @@ public class SaveAndLoadManager
         this.saveData = new ArrayList<>();
 
         //TODO test this default directory on Windows
-        this.pathToSaveFile = "./";
+        this.pathToSaveFile = "save.json";
         
         //defaults for unit testing only
         this.commandInvoker = c;

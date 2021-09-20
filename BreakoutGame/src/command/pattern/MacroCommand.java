@@ -14,7 +14,7 @@ import java.util.Queue;
 import save_and_load.Saveable;
 
 //Data structure to store a bunch of commands
-public class MacroCommand implements Saveable{
+public class MacroCommand {
 	
 	private Queue<Command> commands;
 	

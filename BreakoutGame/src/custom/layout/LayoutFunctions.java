@@ -103,6 +103,20 @@ public class LayoutFunctions {
 				gameEngine.replay();
 			}
 		});
+		
+		EVENT_HANDLER_MAP.put("Save", new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				gameEngine.save();
+			}
+		});
+		
+		EVENT_HANDLER_MAP.put("Load", new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				gameEngine.load();
+			}
+		});
 
 		EVENT_HANDLER_MAP.put("Border", new EventHandler<ActionEvent>() {
 			@Override
@@ -135,8 +149,11 @@ public class LayoutFunctions {
 		customLayout.addNewChild(createButton(gameManager, "Rewind", REWIND), 5, 1);
 		customLayout.addNewChild(createButton(gameManager, "FastForward", FAST_FORWARD), 6, 1);
 		customLayout.addNewChild(createButton(gameManager, "Replay", REPLAY), 7, 1);
+		
+		customLayout.addNewChild(createButton(gameManager, "Save", REPLAY), 8, 1);
+		customLayout.addNewChild(createButton(gameManager, "Load", REPLAY), 9, 1);
 
-		customLayout.addNewChild(createLayoutButton(gameManager, "Border", CHANGE), 8, 1);
+		customLayout.addNewChild(createLayoutButton(gameManager, "Border", CHANGE), 10, 1);
 
 		gameFlow.getChildren().add(gameCanvas);
 
@@ -168,8 +185,11 @@ public class LayoutFunctions {
 		customLayout.addNewChild(createButton(gameManager, "Rewind", REWIND), 1, 11);
 		customLayout.addNewChild(createButton(gameManager, "FastForward", FAST_FORWARD), 1, 13);
 		customLayout.addNewChild(createButton(gameManager, "Replay", REPLAY), 1, 15);
+		
+		customLayout.addNewChild(createButton(gameManager, "Save", REPLAY), 1, 17);
+		customLayout.addNewChild(createButton(gameManager, "Load", REPLAY), 1, 19);
 
-		customLayout.addNewChild(createLayoutButton(gameManager, "Flow", CHANGE), 1, 17);
+		customLayout.addNewChild(createLayoutButton(gameManager, "Flow", CHANGE), 1, 21);
 
 		gameFlow.getChildren().add(gameCanvas);
 
@@ -193,6 +213,8 @@ public class LayoutFunctions {
 		GridPane gridPane = new GridPane();
 		Button button = new Button(actionType, new ImageView(image));
 		button.setOnAction(EVENT_HANDLER_MAP.get(actionType));
+		button.setDefaultButton(false);
+		//button.setFocusTraversable(false);
 
 		gridPane.add(button, 1, 0);
 

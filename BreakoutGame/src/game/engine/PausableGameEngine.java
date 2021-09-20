@@ -12,12 +12,16 @@
  **/
 package game.engine;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+
+import org.json.simple.parser.ParseException;
 
 import breakout.GameManager;
 import collision.detection.CollisionHandler2D;
@@ -30,6 +34,8 @@ import javafx.stage.Stage;
 import observer.pattern.Observable;
 import observer.pattern.Observer;
 import rendering.Renderer;
+import save_and_load.SaveAndLoadManager;
+import save_and_load.Saveable;
 
 public class PausableGameEngine implements Observable {
 
@@ -46,6 +52,8 @@ public class PausableGameEngine implements Observable {
     private Renderer renderer;
     private CollisionHandler2D collisionHandler;
     private GameManager gameManager;
+    
+    private SaveAndLoadManager saveAndLoadManager;
     
 	private Stage gameStage;
 	private Scene gameScene;
@@ -66,6 +74,7 @@ public class PausableGameEngine implements Observable {
     	this.collisionHandler = collisionHandler;
     	this.gameManager = gameManager;
     	this.gameStage = gameStage;
+    	this.saveAndLoadManager = new SaveAndLoadManager(commandInvoker, gameManager);
     	
     	layoutFunctionMap.put(FLOW_LAYOUT, LayoutFunctions.flowLayoutManagerFunction);
     	layoutFunctionMap.put(BORDER_LAYOUT, LayoutFunctions.borderLayoutManagerFunction);
@@ -145,6 +154,8 @@ public class PausableGameEngine implements Observable {
 		observers.clear();
 		observers = null;
 		observers = new ArrayList<Observer>();
+		
+		gameManager.stopMusic();
 	}
 	
     //pause the game
@@ -207,6 +218,50 @@ public class PausableGameEngine implements Observable {
         //Undo all the way to the beginning of the game
 		commandInvoker.undosToRedos();
 		fastForward();
+	}
+	
+	public void save() {
+		List<Object> gameObjects = gameManager.getGameObjects();
+		
+		ArrayList<Saveable> saveableList = (ArrayList) gameObjects.stream().filter(object -> {
+			return object instanceof Saveable;
+		}).map(object -> {
+			return (Saveable) object;
+		}).collect(Collectors.toList());
+		
+		saveAndLoadManager.addSaveObjects(saveableList);
+		
+		try {
+			saveAndLoadManager.saveFile();
+		} catch (IOException e) {
+			System.out.println(saveAndLoadManager.pathToSaveFile);
+			System.out.println("Path not found " + e);
+		} finally {
+			saveAndLoadManager.resetSaveObjects();
+		}
+	}
+	
+	public void load() {
+		try {
+			commandInvoker = new CommandInvoker();
+			saveAndLoadManager.loadFile();
+			ArrayList<Saveable> saveableList = saveAndLoadManager.getSaveObjects();
+			
+			renderer.restart();
+			collisionHandler.restart();
+			gameManager.restart();
+			commandInvoker.restart();
+			
+			saveableList.stream().forEach(object -> {
+				gameManager.addObject((Object) object);
+			});
+			
+			resume();
+			saveAndLoadManager.resetSaveObjects();
+			
+		} catch (IOException | ParseException e) {
+			System.out.println("Path not found");
+		}
 	}
 	
     //Add all objects in an arraylist to the engine
