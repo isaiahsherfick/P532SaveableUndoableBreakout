@@ -153,14 +153,14 @@ public class LayoutFunctions {
 		customLayout.addNewChild(createButton(gameManager, "Restart", RESTART), 2, 1);
 		customLayout.addNewChild(createButton(gameManager, "Undo", UNDO), 3, 1);
 		customLayout.addNewChild(createButton(gameManager, "Redo", REDO), 4, 1);
-		customLayout.addNewChild(createButton(gameManager, "Rewind", REWIND), 5, 1);
-		customLayout.addNewChild(createButton(gameManager, "FastForward", FAST_FORWARD), 6, 1);
-		customLayout.addNewChild(createButton(gameManager, "Replay", REPLAY), 7, 1);
+//		customLayout.addNewChild(createButton(gameManager, "Rewind", REWIND), 5, 1);
+//		customLayout.addNewChild(createButton(gameManager, "FastForward", FAST_FORWARD), 6, 1);
+		customLayout.addNewChild(createButton(gameManager, "Replay", REPLAY), 5, 1);
 		
-		customLayout.addNewChild(createButton(gameManager, "Save", SAVE), 8, 1);
-		customLayout.addNewChild(createButton(gameManager, "Load", LOAD), 9, 1);
+		customLayout.addNewChild(createButton(gameManager, "Save", SAVE), 6, 1);
+		customLayout.addNewChild(createButton(gameManager, "Load", LOAD), 7, 1);
 
-		customLayout.addNewChild(createLayoutButton(gameManager, "Border", CHANGE), 10, 1);
+		customLayout.addNewChild(createLayoutButton(gameManager, "Border", CHANGE), 8, 1);
 
 		gameFlow.getChildren().add(gameCanvas);
 
