@@ -1,3 +1,9 @@
+#SaveableUndoableBreaout
+This is a project from Fall 21 P532 Software Engineering. In groups, we had to take existing Atari Breakout clones from previous weeks' projects and add two key features: save/load and changeable layouts for control panel buttons. I was responsible for the save/load portion of this task. Skills I developed during this project include reading others' code, creating solutions based on the current implementation with a deadline in mind, and concurrent development using branches and merging. We utilized the composite pattern in our saving and loading as well as our changeable layout.
+
+
+
+
 # P532 Assignment 3 Overview
 ## By: Abhishek, Isaiah and Snehal
 
